@@ -1,9 +1,3 @@
-
-
-
-
-
-
 export async function login({username,password}){
     try {
         const response = await fetch('https://localhost:8000/api/login', {
@@ -18,9 +12,10 @@ export async function login({username,password}){
           const {token} = await response.json();
          return token;
 
-        } else {
-          console.log(`Error: ${response.status} - ${response.statusText}`);
-        }
+        } ;
+
+        console.log(`Error: ${response.status} - ${response.statusText}`);
+        
       } catch (err) {
         console.log('Une erreur s\'est produite:', err);
         return 'une erreur s\'est produite';

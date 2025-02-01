@@ -1,6 +1,7 @@
 import { Link } from 'react-router';
 
 const Accueil = () => {
+  sessionStorage.clear();
   return (
     <div className="min-h-screen bg-gray-100">
       {/* En-tête */}
