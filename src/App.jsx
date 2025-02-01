@@ -28,15 +28,15 @@ function App() {
     <Route path="contact"element={<Contact/>} />
     <Route path="administration"element={<Administration/>}  action={loginAction}/>
 
-     <Route  path="dashbordAdmin" element={<AdminLayout/>}>
+     <Route  path="dashboardAdmin" element={<AdminLayout/>}>
      <Route index element={<DashbordAdmin/>} />
      </Route>
       
-     <Route path="dashbordVet" element={< VetLayout/>}>
+     <Route path="dashboardVet" element={< VetLayout/>}>
      <Route index element={<DashbordVet />}/>
      </Route>
 
-     <Route path="dashborW" element={<EmployeLayout/>}>
+     <Route path="dashboardEmployee" element={<EmployeLayout/>}>
      <Route index element={<EmployeDashbord />} />
 
      </Route>

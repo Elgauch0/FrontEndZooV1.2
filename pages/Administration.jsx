@@ -1,38 +1,37 @@
 import { Form } from "react-router";
+import {login} from '../functions.jsx'
+import { jwtDecode } from "jwt-decode";
+import { redirect } from "react-router";
 
 
-
-
-export async function action({request}){
-  const formData = await  request.formData();
-  const usurname = formData.get('email');
+export async function action({ request }) {
+  const formData = await request.formData();
+  const username = formData.get('email');
   const password = formData.get('password');
-  try{
+  const token = await login({username,password});
+  sessionStorage.setItem('token', token);
+  const decodedToken = jwtDecode(token);
+  
+  const {roles}=decodedToken;
+  
+  if(roles.includes('ROLE_ADMIN')){
+    sessionStorage.setItem('role', 'ROLE_ADMIN');
+    return redirect('/dashboardAdmin')
 
-    const response = await fetch('http://localhost:8000/api/login',{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-      },
-      body: JSON.stringify({usurname,password})
-     });
-    if(response.ok){
-      const data = await response.json();
-      console.log(data);
-    }
-    
-    
-    
-  }catch(err){
-    console.log(err);
-    return 'une erreur s\'est produite';
-
+  }else if(roles.includes('ROLE_VETERINAIRE')){
+    sessionStorage.setItem('role', 'ROLE_VETERINAIRE');
+    return redirect('/dashboardVet');
+  }else if(roles.includes('ROLE_EMPLOYE')){
+    sessionStorage.setItem('role', 'ROLE_EMPLOYE');
+    return redirect('/dashboardEmployee');
+  }else{
+    console.log('Role non reconnu');
+    return redirect('*');
   }
-  
-  
-  
-   ;
-}
+ }
+
+
+
 
 
 const Administration = () => {
@@ -53,6 +52,7 @@ const Administration = () => {
               type="email"
               id="username"
               name="email"
+              autoComplete="current-email"
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
               placeholder="Entrez votre nom d'utilisateur"
             />
@@ -66,6 +66,7 @@ const Administration = () => {
               type="password"
               id="password"
               name="password"
+              autoComplete="current-password"
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
               placeholder="Entrez votre mot de passe"
             />
