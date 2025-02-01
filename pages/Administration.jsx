@@ -1,32 +1,41 @@
-import React, { useState } from 'react';
+import { Form } from "react-router";
+
+
+
+
+export async function action({request}){
+  const formData = await  request.formData();
+  const usurname = formData.get('email');
+  const password = formData.get('password');
+  try{
+
+    const response = await fetch('http://localhost:8000/api/login',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+      },
+      body: JSON.stringify({usurname,password})
+     });
+    if(response.ok){
+      const data = await response.json();
+      console.log(data);
+    }
+    
+    
+    
+  }catch(err){
+    console.log(err);
+    return 'une erreur s\'est produite';
+
+  }
+  
+  
+  
+   ;
+}
+
 
 const Administration = () => {
-  // États pour gérer les champs du formulaire
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-
-  // Fonction pour gérer la soumission du formulaire
-  const handleLogin = (e) => {
-    e.preventDefault();
-
-    // Validation basique
-    if (!username || !password) {
-      setError('Veuillez remplir tous les champs.');
-      return;
-    }
-
-    // Ici, vous pouvez ajouter une logique pour vérifier les identifiants
-    // Par exemple, une requête API vers un backend
-    if (username === 'admin' && password === 'admin123') {
-      setError('');
-      alert('Connexion réussie !');
-      // Rediriger vers le tableau de bord d'administration
-    } else {
-      setError('Identifiants incorrects.');
-    }
-  };
-
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
@@ -34,17 +43,16 @@ const Administration = () => {
           Connexion Administrateur
         </h1>
 
-        {/* Formulaire de login */}
-        <form onSubmit={handleLogin}>
+       
+        <Form method='post'>
           <div className="mb-4">
             <label htmlFor="username" className="block text-gray-700 mb-2">
               Nom d'utilisateur
             </label>
             <input
-              type="text"
+              type="email"
               id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              name="email"
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
               placeholder="Entrez votre nom d'utilisateur"
             />
@@ -57,19 +65,12 @@ const Administration = () => {
             <input
               type="password"
               id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              name="password"
               className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
               placeholder="Entrez votre mot de passe"
             />
           </div>
 
-          {/* Affichage des erreurs */}
-          {error && (
-            <div className="mb-4 text-red-500 text-sm text-center">
-              {error}
-            </div>
-          )}
 
           <button
             type="submit"
@@ -77,7 +78,7 @@ const Administration = () => {
           >
             Se connecter
           </button>
-        </form>
+        </Form>
       </div>
     </div>
   );
