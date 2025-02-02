@@ -1,7 +1,7 @@
 import { Form } from "react-router";
 import {login} from '../functions.jsx'
 import { jwtDecode } from "jwt-decode";
-import { redirect,useSearchParams } from "react-router";
+import { redirect,useSearchParams,useNavigation } from "react-router";
 
 
 export async function action({ request }) {
@@ -9,6 +9,7 @@ export async function action({ request }) {
   const username = formData.get('email');
   const password = formData.get('password');
   const token = await login({username,password});
+  console.log(token);
   sessionStorage.setItem('token', token);
   const decodedToken = jwtDecode(token);
   
@@ -48,6 +49,8 @@ export function loader(){
 const Administration = () => {
   const [searchParams,setSearchParams] = useSearchParams();
   const message = searchParams.get('message');
+  const navigation = useNavigation();
+ 
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
@@ -90,6 +93,7 @@ const Administration = () => {
           <button
             type="submit"
             className="w-full bg-green-900 text-white py-2 px-4 rounded-lg hover:bg-green-800 transition-colors duration-300"
+            disabled={navigation.state === 'submitting'} 
           >
             Se connecter
           </button>

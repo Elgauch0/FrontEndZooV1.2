@@ -1,33 +1,28 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Form, useActionData, useNavigation } from 'react-router';
+
+export async function action({ request }) {
+  const formData = await request.formData();
+  const email = formData.get('email');
+  const titre = formData.get('titre');
+  const description = formData.get('description');
+
+  // Validation basique
+  if (!email || !titre || !description) {
+    return { message: 'Veuillez remplir tous les champs.', isError: true };
+  }
+
+  // Simuler l'envoi du formulaire
+  console.log('Email:', email);
+  console.log('Titre:', titre);
+  console.log('Description:', description);
+
+  return { message: 'Votre message a été envoyé avec succès !', isError: false };
+}
 
 const Contact = () => {
-  // États pour gérer les champs du formulaire
-  const [email, setEmail] = useState('');
-  const [titre, setTitre] = useState('');
-  const [description, setDescription] = useState('');
-  const [message, setMessage] = useState('');
-
-  // Fonction pour gérer la soumission du formulaire
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    // Validation basique
-    if (!email || !titre || !description) {
-      setMessage('Veuillez remplir tous les champs.');
-      return;
-    }
-
-    // Simuler l'envoi du formulaire
-    setMessage('Votre message a été envoyé avec succès !');
-    console.log('Email:', email);
-    console.log('Titre:', titre);
-    console.log('Description:', description);
-
-    // Réinitialiser les champs après soumission
-    setEmail('');
-    setTitre('');
-    setDescription('');
-  };
+  const actionData = useActionData(); // Données retournées par l'action
+  const navigation = useNavigation(); // État de navigation (pour gérer le loading)
 
   return (
     <div className="min-h-screen bg-gray-100 py-8">
@@ -37,7 +32,7 @@ const Contact = () => {
         </h1>
 
         <div className="bg-white p-8 rounded-lg shadow-lg max-w-2xl mx-auto">
-          <form onSubmit={handleSubmit}>
+          <Form method="post">
             {/* Champ Email */}
             <div className="mb-6">
               <label htmlFor="email" className="block text-gray-700 mb-2">
@@ -46,8 +41,7 @@ const Contact = () => {
               <input
                 type="email"
                 id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                name="email"
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 placeholder="Entrez votre email"
                 required
@@ -62,8 +56,7 @@ const Contact = () => {
               <input
                 type="text"
                 id="titre"
-                value={titre}
-                onChange={(e) => setTitre(e.target.value)}
+                name="titre"
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 placeholder="Entrez le titre de votre message"
                 required
@@ -77,8 +70,7 @@ const Contact = () => {
               </label>
               <textarea
                 id="description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                name="description"
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                 rows="5"
                 placeholder="Décrivez votre demande ou votre message"
@@ -87,10 +79,10 @@ const Contact = () => {
             </div>
 
             {/* Affichage des messages */}
-            {message && (
+            {actionData?.message && (
               <div className="mb-6 text-center text-sm">
-                <p className={message.includes('succès') ? 'text-green-600' : 'text-red-500'}>
-                  {message}
+                <p className={actionData.isError ? 'text-red-500' : 'text-green-600'}>
+                  {actionData.message}
                 </p>
               </div>
             )}
@@ -99,10 +91,11 @@ const Contact = () => {
             <button
               type="submit"
               className="w-full bg-green-900 text-white py-2 px-4 rounded-lg hover:bg-green-800 transition-colors duration-300"
+              disabled={navigation.state === 'submitting'} // Désactiver le bouton pendant la soumission
             >
-              Envoyer
+              {navigation.state === 'submitting' ? 'Envoi en cours...' : 'Envoyer'}
             </button>
-          </form>
+          </Form>
         </div>
       </div>
     </div>

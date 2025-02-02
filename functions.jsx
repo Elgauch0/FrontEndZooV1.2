@@ -22,3 +22,19 @@ export async function login({username,password}){
       }
 }
 
+
+export async function getServices(){
+  try{
+  const response = await fetch('https://localhost:8000/api/services');
+  
+  if(!response.ok){
+    throw new Error('une erreur dans le fetch ou serveur non accecible');
+  }
+  const data = await  response.json();
+  
+  return data;
+ }catch(error){
+  console.error('try catch problem',error);
+  return 'serveur error';
+}            
+}
