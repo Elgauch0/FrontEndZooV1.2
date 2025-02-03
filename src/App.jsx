@@ -11,8 +11,11 @@ import DashbordAdmin from '../pages/admin/DashbordAdmin';
 import VetLayout from "../components/VetLayout";
 import DashbordVet from '../pages/Vet/DashbordVet';
 import EmployeLayout from "../components/EmployeLayout";
-import EmployeDashbord from "../pages/Employe/EmployeDashbord";
+import EmployeDashbord ,{loader as employeServiceLoader}from "../pages/Employe/EmployeDashbord";
 import ErrorElement from "../components/ErrorElement";
+import AddServices,{action as addActionService} from "../pages/Employe/AddServices";
+import PutService,{action as putServiceAction} from "../pages/Employe/PutService";
+
 
 
 
@@ -41,7 +44,9 @@ function App() {
      </Route>
 
      <Route path="dashboardEmployee" element={<EmployeLayout/>}  loader={requreAuth}>
-     <Route index element={<EmployeDashbord />} />
+     <Route index element={<EmployeDashbord />}  loader={employeServiceLoader}/>
+     <Route path="add" element={<AddServices/>} action={addActionService} />
+     <Route path="put/:id"  element={<PutService />}  action={putServiceAction}/>
 
      </Route>
 

@@ -9,7 +9,7 @@ export async function action({ request }) {
   const username = formData.get('email');
   const password = formData.get('password');
   const token = await login({username,password});
-  console.log(token);
+  
   sessionStorage.setItem('token', token);
   const decodedToken = jwtDecode(token);
   
