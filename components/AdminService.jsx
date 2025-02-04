@@ -8,7 +8,7 @@ function AdminService({ id, nom, description, onDelete }) {
 
     return (
         <div className="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition-shadow duration-300">
-            <Link to={`put/${id}`} state={{nom, description }}  className="block">
+            <Link to={`${id}`} state={{nom, description }}  className="block">
                 <h3 className="text-xl font-bold mb-2">{nom}</h3>
                 <p className="text-gray-600">{description}</p>
             </Link>

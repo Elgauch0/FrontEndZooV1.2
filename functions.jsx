@@ -10,15 +10,17 @@ export async function login({username,password}){
     
         if (response.ok) {
           const {token} = await response.json();
-         return token;
+          return token;
 
         }else {
-          throw new Error(`Erreur lors de la connexion : ${response.status} - ${response.statusText}`);
+          const errorData = await response.json(); 
+          console.error(`Login failed: ${response.status} - ${response.statusText} - ${JSON.stringify(errorData)}`);
+          return null; 
          }
         
-      } catch (err) {
+    } catch (err) {
         console.log('Une erreur s\'est produite:', err);
-        return 'une erreur s\'est produite';
+        return null;
       }
 }
 

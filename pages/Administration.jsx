@@ -1,7 +1,8 @@
-import { Form } from "react-router";
+import { Form, useLoaderData,redirect,useNavigation } from "react-router";
 import {login} from '../functions.jsx'
 import { jwtDecode } from "jwt-decode";
-import { redirect,useSearchParams,useNavigation } from "react-router";
+
+
 
 
 export async function action({ request }) {
@@ -9,6 +10,9 @@ export async function action({ request }) {
   const username = formData.get('email');
   const password = formData.get('password');
   const token = await login({username,password});
+  if (token===null) {
+    return redirect('/administration?message=email ou mdp incorrect'); 
+  }
   
   sessionStorage.setItem('token', token);
   const decodedToken = jwtDecode(token);
@@ -31,24 +35,23 @@ export async function action({ request }) {
     return redirect('/dashboardEmployee', { replace: true });
   }else{
     console.log('Role non reconnu');
-    return redirect('*');
+    return redirect('/administration?message=une erreur sest produite');
   }
  }
 
-
-
-export function loader(){
+export function loader({request}){
   const role = sessionStorage.getItem('role');
   const dashboard = sessionStorage.getItem('dashboard');
   if(role && dashboard){
    return redirect(dashboard, { replace: true });
   }
- return null
+ return new URL(request.url).searchParams.get('message');
 }
 
 const Administration = () => {
-  const [searchParams,setSearchParams] = useSearchParams();
-  const message = searchParams.get('message');
+  
+  
+  const message = useLoaderData();
   const navigation = useNavigation();
  
 
@@ -60,7 +63,7 @@ const Administration = () => {
         </h1>
 
         {message &&   <p className="text-red-500 font-bold text-l mb-4 bg-red-100 p-3 rounded">{message}</p>}
-        <Form method='post'>
+        <Form method='post' replace>
           <div className="mb-4">
             <label htmlFor="username" className="block text-gray-700 mb-2">
               Nom d'utilisateur

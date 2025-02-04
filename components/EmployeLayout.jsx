@@ -24,18 +24,6 @@ function EmployeLayout() {
         >
           add
         </NavLink>
-        <NavLink 
-          to="put"
-          className={getNavLinkStyle}
-        >
-          edit un service
-        </NavLink>
-        <NavLink 
-          to="delete"
-          className={getNavLinkStyle}
-        >
-          supprimer un service
-        </NavLink>
       </nav>
       <Outlet />
     </>

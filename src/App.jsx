@@ -46,7 +46,7 @@ function App() {
      <Route path="dashboardEmployee" element={<EmployeLayout/>}  loader={requreAuth}>
      <Route index element={<EmployeDashbord />}  loader={employeServiceLoader}/>
      <Route path="add" element={<AddServices/>} action={addActionService} />
-     <Route path="put/:id"  element={<PutService />}  action={putServiceAction}/>
+     <Route path=" :id"  element={<PutService />}  action={putServiceAction}/>
 
      </Route>
 
