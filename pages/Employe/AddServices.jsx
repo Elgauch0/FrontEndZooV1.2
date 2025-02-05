@@ -18,10 +18,10 @@ export async function action({request}){
 function AddServices() {
   const actionData = useActionData();
   return (
-    <div className="min-h-screen flex items-center justify-center bg-green-900">
-      <Form method="post" className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-grey-100">
+      <Form method="post" className="bg-green-900 p-8 rounded-lg shadow-md w-full max-w-md">
         <div className="mb-4">
-        <h1 className="text-2xl font-bold text-green-900 mb-4">Ajouter un nouveau service</h1>
+        <h1 className="text-2xl font-bold text-gray-50 mb-4">Ajouter un nouveau service</h1>
         {actionData && actionData.error && (
                 <div className="bg-red-500 text-white p-2 rounded mb-4">
                     {actionData.error}
@@ -32,7 +32,7 @@ function AddServices() {
                     Service ajouté avec succès !
                 </div>
             )}
-          <label htmlFor="nom" className="block text-sm font-medium text-gray-700">Nom:</label>
+          <label htmlFor="nom" className="block text-sm font-medium text-gray-50">Nom:</label>
           <input
             type="text"
             id="nom"
@@ -42,7 +42,7 @@ function AddServices() {
           />
         </div>
         <div className="mb-6">
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description:</label>
+          <label htmlFor="description" className="block text-sm font-medium text-gray-50">Description:</label>
           <textarea
             id="description"
             name="description"

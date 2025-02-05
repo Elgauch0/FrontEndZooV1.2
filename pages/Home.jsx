@@ -1,7 +1,34 @@
-import { Link } from 'react-router';
+import { Link, useLoaderData,useSearchParams } from 'react-router';
+import { getreviews } from '../functions';
+import Review from '../components/Review';
+import ReviewForm from '../components/ReviewForm';
+
+
+
+
+export async function loader(){
+  const data = await getreviews('valid');
+  return data;
+}
 
 const Accueil = () => {
   sessionStorage.clear();
+
+const Reviews = useLoaderData();
+const [searchParams] = useSearchParams();
+const message = searchParams.get('message');
+const error = searchParams.get('error');
+  
+
+
+
+  const ReviewElements = Reviews?.map(review => (
+    <Review key={review.id} id={review.id} username={review.username} avis={review.avis} />
+  )) ?? <p>Aucun avis pour le moment.</p>;
+
+  
+
+ 
   return (
     <div className="min-h-screen bg-gray-100">
       {/* En-tête */}
@@ -22,6 +49,24 @@ const Accueil = () => {
             Arcadia Zoo est un lieu magique où vous pouvez rencontrer des animaux incroyables, des habitats naturels reconstitués et participer à des activités éducatives pour toute la famille. Que vous soyez passionné de nature ou simplement curieux, notre zoo a quelque chose à vous offrir.
           </p>
         </section>
+        <h1 className="m-3 text-3xl text-green-900 text-center">Nos Avis :</h1>
+      <div className="container mx-auto flex justify-center flex-wrap gap-2">
+        {ReviewElements}
+      </div>
+      <div>
+      {message && (
+        <p className="text-green-500 font-bold mt-2 text-center">
+          {message}
+        </p>
+      )}
+      {error && (
+        <p className="text-red-500 font-bold mt-2 text-center">
+          {error}
+        </p>
+      )}
+            <ReviewForm/>
+      </div>
+        
 
         {/* Liens vers les services et contact */}
         <div className="mt-12 flex justify-center space-x-6">

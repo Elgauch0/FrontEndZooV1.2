@@ -22,7 +22,13 @@ function EmployeLayout() {
           to="add"
           className={getNavLinkStyle}
         >
-          add
+          Ajouter Un Service
+        </NavLink>
+        <NavLink 
+          to="reviews"
+          className={getNavLinkStyle}
+        >
+          avis
         </NavLink>
       </nav>
       <Outlet />

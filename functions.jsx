@@ -60,3 +60,51 @@ export async function addService({ nom, description }) {
       return { success: false, error: 'Une erreur s\'est produite lors de la tentative d\'ajout du service.' };
   }
 }
+
+
+export async function getreviews(pathname){
+  try{
+    const response = await fetch(`https://localhost:8000/api/reviews/${pathname}`);
+    
+    if(!response.ok){
+     throw new Error('une erreur dans le fetch ou serveur non accecible');
+    }
+    const data = await response.json();
+   
+    return data
+
+  }catch(err){
+    console.error('try catch problem',err);
+    return null
+
+  }
+
+
+}
+
+
+
+export async function sendReview({username,avis}) {
+  try{
+    const response = await fetch('https://localhost:8000/api/reviews/add', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, avis }),
+    });
+    if(!response.ok){
+      console.error('response error')
+      return 'error response try again later'
+    }
+   return 'Merci pour votre commmentaires , il va etre vu sur notre site dès que quil sera validé'
+
+  }catch(err){
+    console.error(err,'try catch error');
+    return 'try catch erreur try later'
+
+  }
+  
+
+  
+}

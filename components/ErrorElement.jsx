@@ -2,7 +2,7 @@ import { Link, useRouteError } from 'react-router';
 
 function ErrorElement() {
   const error = useRouteError();
-  console.error(error);
+  console.error('my code',error);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-green-900">
@@ -23,7 +23,7 @@ function ErrorElement() {
         )}
         <Link
           to="/"
-          className="inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline transition-all duration-300 hover:bg-green-700 hover:shadow-lg"
+          className="inline-block bg-green-600  text-white font-bold py-2 px-4 rounded-full focus:outline-none focus:shadow-outline transition-all duration-300 hover:bg-green-700 hover:shadow-lg"
         >
           Retour à l'accueil
         </Link>

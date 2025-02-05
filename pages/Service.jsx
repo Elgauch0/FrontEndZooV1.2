@@ -3,8 +3,8 @@ import { getServices } from '../functions';
 import { useLoaderData } from 'react-router';
 
 
-export function loader(){
-return getServices();
+export async function loader(){
+return await  getServices();
 }
 
 const Services = () => {
