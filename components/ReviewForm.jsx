@@ -11,11 +11,11 @@ export async function action({request}){
     
     try {
          await sendReview({ username, avis }); 
-         return redirect('/?message=Merci pour votre commentaire ! Vous pouvez le voir dès que c\'est validé.'); 
+         return redirect('?message=Merci pour votre commentaire ! Vous pouvez le voir dès que c\'est validé.'); 
 
     } catch (error) {
         console.error("Erreur dans l'action:", error);
-        return redirect('/?error=Une erreur s\'est produite lors de l\'envoi de votre commentaire.');
+        return redirect('?error=Une erreur s\'est produite lors de l\'envoi de votre commentaire.');
     } 
 }
 

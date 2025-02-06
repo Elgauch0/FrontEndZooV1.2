@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLoaderData } from 'react-router';
+import { useLoaderData} from 'react-router';
 import AdminService from '../../components/AdminService';
 import { getServices } from '../../functions';
 
@@ -33,8 +33,8 @@ function EmployeDashbord() {
     };
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-            {services.map(service => (
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+            {services?.map(service => (
                 <AdminService 
                     key={service.id} 
                     id={service.id} 
@@ -44,6 +44,7 @@ function EmployeDashbord() {
                 />
             ))}
         </div>
+       
     );
 }
 

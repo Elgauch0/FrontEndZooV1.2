@@ -1,5 +1,6 @@
-import React from 'react';
-import { Form, useActionData, useNavigation } from 'react-router';
+
+import { Form,redirect, useNavigation, useSearchParams } from 'react-router';
+import { useRef,useEffect } from 'react';
 
 export async function action({ request }) {
   const formData = await request.formData();
@@ -7,32 +8,71 @@ export async function action({ request }) {
   const titre = formData.get('titre');
   const description = formData.get('description');
 
-  // Validation basique
+  
   if (!email || !titre || !description) {
-    return { message: 'Veuillez remplir tous les champs.', isError: true };
+    return redirect('?message=try again',{replace:true});
   }
 
-  // Simuler l'envoi du formulaire
-  console.log('Email:', email);
-  console.log('Titre:', titre);
-  console.log('Description:', description);
+  const data = {  
+    email: email,
+    titre: titre,
+    description: description
+  };
 
-  return { message: 'Votre message a été envoyé avec succès !', isError: false };
+  try {
+    const response = await fetch('https://127.0.0.1:8000/api/contact', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data) 
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json(); 
+      console.error(errorData)
+      return redirect('?message=error from the server or bad request',{ replace: true }); 
+    }
+
+    return redirect('?message=email envoyé avec succes on vous réponde dés que possible',{ replace: true });
+
+  } catch (error) {
+    console.error("Erreur lors de la requête fetch :", error); // Log l'erreur pour le débogage
+    return redirect('?message=error fetch try later please',{ replace: true });
+  }
 }
 
 const Contact = () => {
-  const actionData = useActionData(); // Données retournées par l'action
-  const navigation = useNavigation(); // État de navigation (pour gérer le loading)
+  const [searchParams]= useSearchParams();
+  const message = searchParams.get('message');
+  const navigation = useNavigation(); 
+  const formRef = useRef();
+
+  useEffect(()=>{
+    if(formRef.current && message){
+      formRef.current.reset(); 
+      console.log(message);
+    }
+
+  },[message])
+
+
 
   return (
     <div className="min-h-screen bg-gray-100 py-8">
       <div className="container mx-auto px-4">
         <h1 className="text-4xl font-bold text-center text-green-900 mb-8">
-          Nous Contacter
+          Nous Contacter :
         </h1>
+         
+        {message && (
+          <div className="mb-6 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 text-center">
+            <p>{message}</p>
+          </div>
+        )}
 
         <div className="bg-white p-8 rounded-lg shadow-lg max-w-2xl mx-auto">
-          <Form method="post">
+          <Form method="post" ref={formRef}>
             {/* Champ Email */}
             <div className="mb-6">
               <label htmlFor="email" className="block text-gray-700 mb-2">
@@ -78,20 +118,13 @@ const Contact = () => {
               />
             </div>
 
-            {/* Affichage des messages */}
-            {actionData?.message && (
-              <div className="mb-6 text-center text-sm">
-                <p className={actionData.isError ? 'text-red-500' : 'text-green-600'}>
-                  {actionData.message}
-                </p>
-              </div>
-            )}
+          
 
             {/* Bouton de soumission */}
             <button
               type="submit"
               className="w-full bg-green-900 text-white py-2 px-4 rounded-lg hover:bg-green-800 transition-colors duration-300"
-              disabled={navigation.state === 'submitting'} // Désactiver le bouton pendant la soumission
+            // Désactiver le bouton pendant la soumission
             >
               {navigation.state === 'submitting' ? 'Envoi en cours...' : 'Envoyer'}
             </button>

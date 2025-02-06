@@ -4,7 +4,7 @@ import Home,{loader as homeLoader} from "../pages/Home"
 import Service,{loader as serviceLoader} from "../pages/Service";
 import Habitats from "../pages/Habitats";
 import Administration,{action as loginAction,loader as loginLoader} from "../pages/Administration";
-import Contact from "../pages/Contact";
+import Contact ,{action as contactAction}from "../pages/Contact";
 import NotFound from "../pages/NotFound";
 import AdminLayout,{loader as requreAuth} from "../components/AdminLayout";
 import DashbordAdmin from '../pages/admin/DashbordAdmin';
@@ -17,7 +17,7 @@ import AddServices,{action as addActionService} from "../pages/Employe/AddServic
 import PutService,{action as putServiceAction} from "../pages/Employe/PutService";
 import Reviews,{loader as reviewsLoader} from "../pages/Employe/Reviews";
 import {action as reviewAction} from '../components/ReviewForm'
-
+import Confirmation from "../components/Confirmation";
 
 
 
@@ -31,8 +31,10 @@ function App() {
     <Route index element={<Home/>} loader={homeLoader} action={reviewAction} />
     <Route path="services"element={<Service/>} loader={serviceLoader}  />
     <Route path="habitats"element={<Habitats />} />
-    <Route path="contact"element={<Contact/>} />
+    <Route path="contact"element={<Contact/>} action={contactAction} />
     <Route path="administration"element={<Administration/>} loader={loginLoader} action={loginAction}/>
+    <Route path="confirmation" element={<Confirmation />} />
+    
 
     {/**private section of the router */}
 
