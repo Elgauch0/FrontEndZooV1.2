@@ -17,7 +17,8 @@ import AddServices,{action as addActionService} from "../pages/Employe/AddServic
 import PutService,{action as putServiceAction} from "../pages/Employe/PutService";
 import Reviews,{loader as reviewsLoader} from "../pages/Employe/Reviews";
 import {action as reviewAction} from '../components/ReviewForm'
-import Confirmation from "../components/Confirmation";
+import Alimentation ,{loader as alimetationLoader,action as alimentationAction} from "../components/Alimentation";
+
 
 
 
@@ -33,7 +34,7 @@ function App() {
     <Route path="habitats"element={<Habitats />} />
     <Route path="contact"element={<Contact/>} action={contactAction} />
     <Route path="administration"element={<Administration/>} loader={loginLoader} action={loginAction}/>
-    <Route path="confirmation" element={<Confirmation />} />
+    
     
 
     {/**private section of the router */}
@@ -50,8 +51,9 @@ function App() {
      <Route path="dashboardEmployee" element={<EmployeLayout/>}  loader={requreAuth}>
      <Route index element={<EmployeDashbord />}  loader={employeServiceLoader}/>
      <Route path="add" element={<AddServices/>} action={addActionService} />
-     <Route path=" :id"  element={<PutService />}  action={putServiceAction}/>
+     <Route path=":id"  element={<PutService />}  action={putServiceAction}/>
      <Route path="reviews" element={< Reviews/>} loader={reviewsLoader} />
+     <Route path="alimentations" element={<Alimentation />}  loader={alimetationLoader} action={alimentationAction}/>
 
      </Route>
 

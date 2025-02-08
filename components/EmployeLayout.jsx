@@ -30,8 +30,16 @@ function EmployeLayout() {
         >
           avis
         </NavLink>
+      
+      <NavLink 
+          to="alimentations"
+          className={getNavLinkStyle}
+        >
+          alimentations
+        </NavLink>
       </nav>
       <Outlet />
+
     </>
   );
 }

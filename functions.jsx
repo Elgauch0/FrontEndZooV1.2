@@ -108,3 +108,23 @@ export async function sendReview({username,avis}) {
 
   
 }
+
+
+export async function getAnimals() {
+  let animals = sessionStorage.getItem('animals');
+  if (animals) {
+    return JSON.parse(animals);
+  }
+  try {
+    const response = await fetch('https://localhost:8000/api/animal/');
+    if (!response.ok) {
+      throw new Error('une erreur dans le fetch ou serveur non accessible');
+    }
+    animals = await response.json();
+    sessionStorage.setItem('animals', JSON.stringify(animals));
+    return animals;
+  } catch (err) {
+    console.error(err);
+    throw new Error('error dans le try catch, réessayez plus tard');
+  }
+}
