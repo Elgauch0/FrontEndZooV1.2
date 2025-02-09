@@ -22,9 +22,13 @@ const error = searchParams.get('error');
 
 
 
-  const ReviewElements = Reviews?.map(review => (
+const ReviewElements = Reviews?.length > 0 ? (
+  Reviews.map((review) => (
     <Review key={review.id} id={review.id} username={review.username} avis={review.avis} />
-  )) ?? <p>Aucun avis pour le moment.</p>;
+  ))
+) : (
+  <p className="text-gray-600 text-center">Aucun avis pour le moment.</p>
+);
 
   
 
@@ -50,8 +54,10 @@ const error = searchParams.get('error');
           </p>
         </section>
         <h1 className="m-3 text-3xl text-green-900 text-center">Nos Avis :</h1>
-      <div className="container mx-auto flex justify-center flex-wrap gap-2">
+        <div className="container mx-auto px-4">
+       <div className="flex flex-wrap justify-center gap-4">
         {ReviewElements}
+      </div>
       </div>
       <div>
       {message && (

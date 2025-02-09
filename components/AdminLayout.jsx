@@ -4,11 +4,12 @@ import { Outlet, redirect } from "react-router";
 
 
 export function loader(){
-  const token = sessionStorage.getItem('token');
+  //desactiver le firewall le temps de faire les pages vet et admin
+  // const token = sessionStorage.getItem('token'); 
   
-  if(!token){
-    return redirect('/administration?message=Vous devez être connecté pour aller à cette page');
-  }
+  // if(!token){
+  //   return redirect('/administration?message=Vous devez être connecté pour aller à cette page');
+  // }
   return null;
 }
 

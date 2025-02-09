@@ -37,6 +37,12 @@ function EmployeLayout() {
         >
           alimentations
         </NavLink>
+        <NavLink 
+          to="taches"
+          className={getNavLinkStyle}
+        >
+          taches
+        </NavLink>
       </nav>
       <Outlet />
 

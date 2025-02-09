@@ -9,7 +9,7 @@ import NotFound from "../pages/NotFound";
 import AdminLayout,{loader as requreAuth} from "../components/AdminLayout";
 import DashbordAdmin from '../pages/admin/DashbordAdmin';
 import VetLayout from "../components/VetLayout";
-import DashbordVet from '../pages/Vet/DashbordVet';
+import DashbordVet ,{loader as dashVetloader}from '../pages/Vet/DashbordVet';
 import EmployeLayout from "../components/EmployeLayout";
 import EmployeDashbord ,{loader as employeServiceLoader}from "../pages/Employe/EmployeDashbord";
 import ErrorElement from "../components/ErrorElement";
@@ -18,6 +18,9 @@ import PutService,{action as putServiceAction} from "../pages/Employe/PutService
 import Reviews,{loader as reviewsLoader} from "../pages/Employe/Reviews";
 import {action as reviewAction} from '../components/ReviewForm'
 import Alimentation ,{loader as alimetationLoader,action as alimentationAction} from "../components/Alimentation";
+import RapportVetForm , {action as rapportVetAction,loader as rapportVetLoader}from "../components/RapportVetForm";
+import HabitatAvis ,{loader as habitatAvisLoader , action as habitatAvisAction}from "../components/HabitatAvis";
+import TachesHabitats ,{loader as tachesHabitatsLoader,action as tachesHabitatsAction}from "../components/TachesHabitats";
 
 
 
@@ -37,23 +40,26 @@ function App() {
     
     
 
-    {/**private section of the router */}
+    {/**###################################################### ADMin Dashboard ####################################################### */}
 
      <Route  path="dashboardAdmin" element={<AdminLayout/>} loader={requreAuth}>
      <Route index element={<DashbordAdmin/>} />
      </Route>
-      
+      {/**###################################################### VET Dashboard ####################################################### */}
      <Route path="dashboardVet" element={< VetLayout/>}  loader={requreAuth}>
-     <Route index element={<DashbordVet />}/>
+     <Route index element={<DashbordVet />} loader={dashVetloader}/>
+     <Route path="addRapport" element={<RapportVetForm />} loader={rapportVetLoader} action={rapportVetAction}  />
+     <Route path="avis" element={<HabitatAvis />}  loader={habitatAvisLoader} action={habitatAvisAction} />
      
      </Route>
-
+      {/**######################################################Employe Dashboard ####################################################### */}
      <Route path="dashboardEmployee" element={<EmployeLayout/>}  loader={requreAuth}>
      <Route index element={<EmployeDashbord />}  loader={employeServiceLoader}/>
      <Route path="add" element={<AddServices/>} action={addActionService} />
      <Route path=":id"  element={<PutService />}  action={putServiceAction}/>
      <Route path="reviews" element={< Reviews/>} loader={reviewsLoader} />
      <Route path="alimentations" element={<Alimentation />}  loader={alimetationLoader} action={alimentationAction}/>
+     <Route path="taches" element={<TachesHabitats />} loader={tachesHabitatsLoader}  action={tachesHabitatsAction}/>
 
      </Route>
 

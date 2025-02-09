@@ -26,7 +26,7 @@ export function Reviews() {
         throw new Error('Réponse fetch erreur');
       }
 
-      // Mettre à jour la liste des avis après l'action
+      
       const newData = await getreviews('nvalid');
       setReviews(newData);
     } catch (err) {

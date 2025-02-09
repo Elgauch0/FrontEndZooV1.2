@@ -128,3 +128,46 @@ export async function getAnimals() {
     throw new Error('error dans le try catch, réessayez plus tard');
   }
 }
+
+
+export async function getRapports(page=1,limit=10){
+  const baseUrl = 'https://localhost:8000/api/alimentation';
+  const url = (page && limit) ? `${baseUrl}?page=${page}&limit=${limit}` : baseUrl;
+  try{
+    const response = await fetch(url);
+    
+    if(!response.ok){
+     throw new Error('response erreur request invalid');
+    }
+    const data = await response.json();
+   
+    return data
+
+  }catch(err){
+    console.error('try catch problem',err);
+    return null
+
+  }
+
+
+}
+
+
+export async function getHabitats() {
+  try{
+      
+      const response = await fetch('https://localhost:8000/api/habitat/');
+      if (!response.ok) {
+        throw new Error('Erreur lors de la récupération des habitats');
+      }
+
+      const habitats = await response.json();
+     
+
+      return habitats;
+    }catch (err) {
+    console.error(err);
+    throw new Error('Erreur lors de la récupération des habitats');
+  }
+}
+
