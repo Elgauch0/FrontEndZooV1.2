@@ -7,7 +7,7 @@ import Administration,{action as loginAction,loader as loginLoader} from "../pag
 import Contact ,{action as contactAction}from "../pages/Contact";
 import NotFound from "../pages/NotFound";
 import AdminLayout,{loader as requreAuth} from "../components/AdminLayout";
-import DashbordAdmin from '../pages/admin/DashbordAdmin';
+import DashbordAdmin ,{loader as dashboardAdminloader,action as dashboardAdminAction} from '../pages/admin/DashbordAdmin';
 import VetLayout from "../components/VetLayout";
 import DashbordVet ,{loader as dashVetloader}from '../pages/Vet/DashbordVet';
 import EmployeLayout from "../components/EmployeLayout";
@@ -21,7 +21,11 @@ import Alimentation ,{loader as alimetationLoader,action as alimentationAction} 
 import RapportVetForm , {action as rapportVetAction,loader as rapportVetLoader}from "../components/RapportVetForm";
 import HabitatAvis ,{loader as habitatAvisLoader , action as habitatAvisAction}from "../components/HabitatAvis";
 import TachesHabitats ,{loader as tachesHabitatsLoader,action as tachesHabitatsAction}from "../components/TachesHabitats";
-
+import Animals,{loader as animalLoader} from "../pages/admin/Animals";
+import Animal,{action as animalAction}from '../pages/admin/Animal'
+import AnimalLayout from "../components/AnimalLayout";
+import AdminDashboard from "../pages/admin/AdminDashboard";
+import AddAnimal,{loader as addAnimalLoader,action as addAnimalAction} from "../pages/admin/AddAnimal";
 
 
 
@@ -43,7 +47,18 @@ function App() {
     {/**###################################################### ADMin Dashboard ####################################################### */}
 
      <Route  path="dashboardAdmin" element={<AdminLayout/>} loader={requreAuth}>
-     <Route index element={<DashbordAdmin/>} />
+     <Route index element={<AdminDashboard/>}  />
+     <Route  path="users" element={<DashbordAdmin/>}  loader={dashboardAdminloader} action={dashboardAdminAction}/>
+
+     <Route path="animals"element={<AnimalLayout/>} >
+     <Route index  element={<Animals/> } loader={animalLoader} />
+     <Route path=":id" element={< Animal />} action={animalAction} />
+     <Route path="add" element={<AddAnimal />} loader={addAnimalLoader} action={addAnimalAction} />
+     
+     
+
+     </Route>
+
      </Route>
       {/**###################################################### VET Dashboard ####################################################### */}
      <Route path="dashboardVet" element={< VetLayout/>}  loader={requreAuth}>

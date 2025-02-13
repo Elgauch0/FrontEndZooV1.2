@@ -1,14 +1,19 @@
+import { setRole } from "../functions";
 
 
-// Composant pour afficher un utilisateur individuel avec Tailwind CSS
-function User({ id, nom, prenom, email, role }) {
+
+
+const UserComponent = (props) => {
+
   return (
-    <div className="bg-white shadow-md rounded-lg p-4 mb-4">
-      <h2 className="text-xl font-bold">{nom} {prenom}</h2>
-      <p className="text-gray-600">Email: {email}</p>
-      <p className="text-gray-600">Role: {role}</p>
+    <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      <h2 className="text-xl font-semibold">{props.nom} {props.prenom}</h2>
+      <p className="text-gray-700">Email: {props.email}</p>
+      <p className="text-gray-700">Fonction : {setRole(props.roles)}</p>
+      <button className="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+       onClick={(event)=>props.onDelete(props.id)}>Supprimer</button>
     </div>
   );
-}
+};
 
-export default User;
+export default UserComponent;

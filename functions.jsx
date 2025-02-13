@@ -24,7 +24,7 @@ export async function login({username,password}){
       }
 }
 
-//services------------------------------------------------------->
+
 export async function getServices(){
   try{
   const response = await fetch('https://localhost:8000/api/services');
@@ -111,21 +111,18 @@ export async function sendReview({username,avis}) {
 
 
 export async function getAnimals() {
-  let animals = sessionStorage.getItem('animals');
-  if (animals) {
-    return JSON.parse(animals);
-  }
+
   try {
-    const response = await fetch('https://localhost:8000/api/animal/');
+    const response = await fetch('https://localhost:8000/api/animal');
     if (!response.ok) {
-      throw new Error('une erreur dans le fetch ou serveur non accessible');
+      throw new Error('Une erreur dans le fetch ou serveur non accessible');
     }
-    animals = await response.json();
-    sessionStorage.setItem('animals', JSON.stringify(animals));
+    const animals = await response.json();
+    
+
     return animals;
   } catch (err) {
-    console.error(err);
-    throw new Error('error dans le try catch, réessayez plus tard');
+    console.error('Erreur lors de la récupération des animaux:', err);
   }
 }
 
@@ -170,4 +167,62 @@ export async function getHabitats() {
     throw new Error('Erreur lors de la récupération des habitats');
   }
 }
+
+
+export async function getUsers() {
+  try {
+      
+      const response = await fetch('https://localhost:8000/api/administration/admin/users');
+      if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const users = await response.json();    
+      return users;
+  } catch (error) {
+     console.error('Erreur lors de la récupération des utilisateurs:', error);
+  }
+}
+
+
+
+export function setRole(rolesArray) {
+  if (rolesArray.includes('ROLE_ADMIN')) {
+      return 'Admin';
+  }
+  if (rolesArray.includes('ROLE_VETERINAIRE')) {
+      return 'Vétérinaire';
+  }
+  return 'Employé';
+}
+export async function deleteUser(id) {
+  const response = await fetch(`https://localhost:8000/api/administration/admin/users/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error('Erreur lors de la suppression de l\'utilisateur');
+  }
+
+  return null;
+}
+
+export async function createUser(userData) {
+  const response = await fetch('https://localhost:8000/api/administration/admin/users/add', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(userData),
+  });
+
+  if (!response.ok) {
+    throw new Error('Erreur lors de la création de l\'utilisateur');
+  }
+
+  return null;
+}
+
 
