@@ -26,7 +26,7 @@ import Animal,{action as animalAction}from '../pages/admin/Animal'
 import AnimalLayout from "../components/AnimalLayout";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import AddAnimal,{loader as addAnimalLoader,action as addAnimalAction} from "../pages/admin/AddAnimal";
-
+import ComptesRendus , {loader as compteRenduLoader}from "../pages/admin/ComptesRendus";
 
 
 
@@ -54,10 +54,13 @@ function App() {
      <Route index  element={<Animals/> } loader={animalLoader} />
      <Route path=":id" element={< Animal />} action={animalAction} />
      <Route path="add" element={<AddAnimal />} loader={addAnimalLoader} action={addAnimalAction} />
-     
+     </Route>
+
+     <Route path="rapports"  element={<ComptesRendus />} loader={compteRenduLoader}>
      
 
      </Route>
+
 
      </Route>
       {/**###################################################### VET Dashboard ####################################################### */}
@@ -67,6 +70,9 @@ function App() {
      <Route path="avis" element={<HabitatAvis />}  loader={habitatAvisLoader} action={habitatAvisAction} />
      
      </Route>
+
+
+
       {/**######################################################Employe Dashboard ####################################################### */}
      <Route path="dashboardEmployee" element={<EmployeLayout/>}  loader={requreAuth}>
      <Route index element={<EmployeDashbord />}  loader={employeServiceLoader}/>

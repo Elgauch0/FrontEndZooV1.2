@@ -226,3 +226,23 @@ export async function createUser(userData) {
 }
 
 
+export async function getComptesR() {
+  try {
+    
+    const response = await fetch("https://localhost:8000/api/administration/vet/rapport/");
+
+    
+    if (!response.ok) {
+      throw new Error(`Erreur HTTP: ${response.status}`);
+    }
+    const data = await response.json();
+
+   
+    return data;
+  } catch (error) {
+    
+    console.error("Erreur lors de la récupération des rapports:", error);
+    throw error;
+  }
+}
+

@@ -48,6 +48,12 @@ function AdminLayout() {
         >
           animals
         </NavLink>
+        <NavLink
+          to="rapports"
+          className={getNavLinkStyle}
+        >
+          Comptes-rendus
+        </NavLink>
       </nav>
 
       
