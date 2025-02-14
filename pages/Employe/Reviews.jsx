@@ -1,6 +1,6 @@
 import { useLoaderData } from "react-router";
 import { useState } from "react";
-import { getreviews } from "../../functions";
+import { getreviews, validReview } from "../../functions";
 import AdminReview from "../../components/AdminReview";
 
 export async function loader() {
@@ -14,20 +14,8 @@ export function Reviews() {
 
   async function handleCLick(id, action) {
     try {
-      const response = await fetch(`https://localhost:8000/api/reviews/${id}?action=${action}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error('Réponse fetch erreur');
-      }
-
-      
-      const newData = await getreviews('nvalid');
+     await validReview(id,action);
+     const newData = await getreviews('nvalid');
       setReviews(newData);
     } catch (err) {
       console.error(err);

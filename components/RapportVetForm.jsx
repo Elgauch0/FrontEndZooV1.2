@@ -1,5 +1,5 @@
 import { Form, useActionData, useLoaderData } from "react-router";
-import { getAnimals } from "../functions";
+import { addRapport, getAnimals } from "../functions";
 import { useEffect, useRef } from "react";
 
 
@@ -22,22 +22,10 @@ export async function action({ request }) {
   }
 
   try {
-    const response = await fetch('https://localhost:8000/api/administration/vet/rapport/add', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ etat, nourriture, autreDetail, animalId }),
-    });
-
-    if (!response.ok) {
-      if (response.status === 400) {
-        const errorData = await response.json();
-        console.error(errorData);
-        return { type: 'error', text: "Requête incorrecte. Veuillez vérifier les données saisies." };
-      }
-      throw new Error('Erreur de réponse');
-    }
+    const result = await addRapport({ etat, nourriture, autreDetail, animalId })
+    if (result && result.type === 'error') {
+      return result; 
+  }
 
     return { type: 'success', text: 'Rapport vétérinaire ajouté avec succès.' };
   } catch (err) {

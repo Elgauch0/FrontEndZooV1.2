@@ -1,3 +1,12 @@
+const  token =sessionStorage.getItem('token'); 
+const API_URL = 'https://localhost:8000/api/'; 
+
+
+
+export function requireAuth() {
+  const token = sessionStorage.getItem('token');
+  return !!token;  
+}
 export async function login({username,password}){
     try {
         const response = await fetch('https://localhost:8000/api/login', {
@@ -27,7 +36,12 @@ export async function login({username,password}){
 
 export async function getServices(){
   try{
-  const response = await fetch('https://localhost:8000/api/services');
+  const response = await fetch( API_URL+'services',{
+    method:'GET',
+    headers:{'Content-Type':'application/json',
+              'Authorization': `Bearer ${token}`
+    }
+   });
   
   if(!response.ok){
     throw new Error('une erreur dans le fetch ou serveur non accecible');
@@ -41,11 +55,34 @@ export async function getServices(){
 }            
 }
 
+export async function deleteService(id) {
+  try {
+    const response = await fetch(API_URL+`administration/services/${id}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+
+         },
+    });
+
+    if (!response.ok) {
+        throw new Error('Erreur lors de la suppression du service');
+    }
+
+    return true;
+} catch (error) {
+    console.error('Erreur:', error);
+}
+  
+}
+
 export async function addService({ nom, description }) {
   try {
-      const response = await fetch('https://localhost:8000/api/services/add', {
+      const response = await fetch(API_URL +'administration/services/add', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json',
+                      'Authorization': `Bearer ${token}`
+          },
           body: JSON.stringify({ nom, description })
       });
 
@@ -63,9 +100,14 @@ export async function addService({ nom, description }) {
 
 
 export async function getreviews(pathname){
+  const admin = pathname ==="nvalid" ? 'administration/': '';
   try{
-    const response = await fetch(`https://localhost:8000/api/reviews/${pathname}`);
-    
+    const response = await fetch(API_URL +`${admin}reviews/${pathname}`,{
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${token}`
+      },
+    });
     if(!response.ok){
      throw new Error('une erreur dans le fetch ou serveur non accecible');
     }
@@ -81,12 +123,66 @@ export async function getreviews(pathname){
 
 
 }
+export async function addAlimentation(animal_id, nourriture_donnée, quantité) {
+  const response = await fetch(API_URL+'administration/alimentation/add', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify({ animal_id, nourriture_donnée, quantité }),
+  });
 
+  if (!response.ok) {
+    if (response.status === 400) {
+      const errorData = await response.json();
+      console.error(errorData);
+      throw new Error("Requête incorrecte. Veuillez vérifier les données saisies.");
+    }
+    throw new Error('Erreur de réponse');
+  }
 
+  return response.json();
+}
+export async function updateHabitatCommentaire(id, data) {
+  const response = await fetch(API_URL+`administration/habitat/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      'Authorization': `Bearer ${token}`
+
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "Problème serveur : le commentaire n'a pas pu être mis à jour.");
+  }
+
+  return response.json();
+}
+
+export async function validReview(id,action) {
+  const response = await fetch(API_URL + `administration/reviews/${id}?action=${action}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+
+    },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error('Réponse fetch erreur');
+  }
+  
+}
 
 export async function sendReview({username,avis}) {
   try{
-    const response = await fetch('https://localhost:8000/api/reviews/add', {
+    const response = await fetch(API_URL + 'reviews/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -113,13 +209,16 @@ export async function sendReview({username,avis}) {
 export async function getAnimals() {
 
   try {
-    const response = await fetch('https://localhost:8000/api/animal');
+    const response = await fetch(API_URL +'animal',{
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json',
+      },
+
+    });
     if (!response.ok) {
       throw new Error('Une erreur dans le fetch ou serveur non accessible');
     }
     const animals = await response.json();
-    
-
     return animals;
   } catch (err) {
     console.error('Erreur lors de la récupération des animaux:', err);
@@ -128,10 +227,17 @@ export async function getAnimals() {
 
 
 export async function getRapports(page=1,limit=10){
-  const baseUrl = 'https://localhost:8000/api/alimentation';
+  const baseUrl = API_URL+'administration/alimentation';
   const url = (page && limit) ? `${baseUrl}?page=${page}&limit=${limit}` : baseUrl;
   try{
-    const response = await fetch(url);
+    const response = await fetch(url,{
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json',
+                  'Authorization': `Bearer ${token}`
+      },
+
+
+    });
     
     if(!response.ok){
      throw new Error('response erreur request invalid');
@@ -153,7 +259,7 @@ export async function getRapports(page=1,limit=10){
 export async function getHabitats() {
   try{
       
-      const response = await fetch('https://localhost:8000/api/habitat/');
+      const response = await fetch(API_URL+'habitat/');
       if (!response.ok) {
         throw new Error('Erreur lors de la récupération des habitats');
       }
@@ -172,7 +278,12 @@ export async function getHabitats() {
 export async function getUsers() {
   try {
       
-      const response = await fetch('https://localhost:8000/api/administration/admin/users');
+      const response = await fetch(API_URL+'administration/admin/users',{
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+        },
+      });
       if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -185,20 +296,13 @@ export async function getUsers() {
 
 
 
-export function setRole(rolesArray) {
-  if (rolesArray.includes('ROLE_ADMIN')) {
-      return 'Admin';
-  }
-  if (rolesArray.includes('ROLE_VETERINAIRE')) {
-      return 'Vétérinaire';
-  }
-  return 'Employé';
-}
+
 export async function deleteUser(id) {
-  const response = await fetch(`https://localhost:8000/api/administration/admin/users/${id}`, {
+  const response = await fetch(API_URL+`administration/admin/users/${id}`, {
     method: 'DELETE',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
     }
   });
 
@@ -210,12 +314,13 @@ export async function deleteUser(id) {
 }
 
 export async function createUser(userData) {
-  const response = await fetch('https://localhost:8000/api/administration/admin/users/add', {
+  const response = await fetch(API_URL + 'administration/admin/users/add', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
     },
-    body: JSON.stringify(userData),
+    body: JSON.stringify(userData)
   });
 
   if (!response.ok) {
@@ -229,7 +334,13 @@ export async function createUser(userData) {
 export async function getComptesR() {
   try {
     
-    const response = await fetch("https://localhost:8000/api/administration/vet/rapport/");
+    const response = await fetch(API_URL+"administration/vet/rapport/",{
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+    });
 
     
     if (!response.ok) {
@@ -246,3 +357,106 @@ export async function getComptesR() {
   }
 }
 
+export async function updateAnimal(id,updatedAnimal) {
+  const response = await fetch(API_URL+`administration/animal/${id}`, {
+    method: 'PUT',
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+        
+    },
+    body: JSON.stringify(updatedAnimal),
+});
+
+if (!response.ok) {
+    throw new Error('Failed to update animal');
+}
+  
+}
+export async function addAnimal(newAnimal) 
+{
+  const response = await fetch(API_URL+"administration/animal/add", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+        'Authorization': `Bearer ${token}`
+     },
+    body: JSON.stringify(newAnimal),
+});
+
+if (!response.ok) {
+    throw new Error("Erreur lors de l'ajout de l'animal");
+}  
+}
+
+export async function deleteAnimal(id) {
+  const response = await fetch(API_URL+`administration/animal/${id}`, {
+    method: "DELETE",
+    headers:{ 
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`}
+  });
+  if (!response.ok) {
+      console.log('response not ok')
+    throw new Error("Erreur lors de la suppression de l'animal");
+  }
+  
+}
+
+export async function addRapport({ etat, nourriture, autreDetail, animalId }) {
+  const response = await fetch(API_URL+'administration/vet/rapport/add', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+
+    },
+    body: JSON.stringify({ etat, nourriture, autreDetail, animalId }),
+  });
+
+  if (!response.ok) {
+    if (response.status === 400) {
+      const errorData = await response.json();
+      console.error(errorData);
+      return { type: 'error', text: "Requête incorrecte. Veuillez vérifier les données saisies." };
+    }
+    throw new Error('Erreur de réponse');
+  }
+  
+}
+
+export async function addAvisVet(id,data) {
+  try {
+    const response = await fetch(API_URL+`administration/habitat/${id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json",
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Erreur lors de la mise à jour de l'habitat");
+    }
+
+    
+    return { erreur: false, message: "Commentaire envoyé avec succès !" };
+} catch (error) {
+    console.error("Erreur lors de la mise à jour de l'habitat :", error.message);
+    // Retourner un message d'erreur
+    return { erreur: true, message: "Problème serveur : le commentaire n'a pas pu être envoyé." };
+}
+  
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+export function setRole(rolesArray) {
+  if (rolesArray.includes('ROLE_ADMIN')) {
+      return 'Admin';
+  }
+  if (rolesArray.includes('ROLE_VETERINAIRE')) {
+      return 'Vétérinaire';
+  }
+  return 'Employé';
+}

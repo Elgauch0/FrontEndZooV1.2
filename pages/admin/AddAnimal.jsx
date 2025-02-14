@@ -1,5 +1,5 @@
 import { useLoaderData, Form, redirect } from "react-router";
-import { getHabitats } from "../../functions";
+import { getHabitats ,addAnimal} from "../../functions";
 
 
 export async function loader() {
@@ -15,18 +15,8 @@ export async function action({ request }) {
         habitatId: formData.get("habitatId"),
     };
 
-    
-    const response = await fetch("https://localhost:8000/api/animal/add", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newAnimal),
-    });
-
-    if (!response.ok) {
-        throw new Error("Erreur lors de l'ajout de l'animal");
-    }
+     await addAnimal(newAnimal);
+   
     return redirect("/dashboardAdmin/animals?message=Animal ajouté avec succès");
 }
 

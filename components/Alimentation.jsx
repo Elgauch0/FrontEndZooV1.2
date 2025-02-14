@@ -1,5 +1,5 @@
 import { Form, useActionData, useLoaderData } from "react-router";
-import { getAnimals } from "../functions";
+import { getAnimals ,addAlimentation} from "../functions";
 import { useEffect, useRef } from "react";
 
 export async function loader() {
@@ -18,27 +18,11 @@ export async function action({ request }) {
   }
 
   try {
-    const response = await fetch('https://localhost:8000/api/alimentation/add', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ animal_id, nourriture_donnée, quantité }),
-    });
-
-    if (!response.ok) {
-      if (response.status === 400) { 
-        const errorData = await response.json(); 
-        console.error(errorData);
-        return { type: 'error', text:"Requête incorrecte. Veuillez vérifier les données saisies." };
-      }
-      throw new Error('Erreur de réponse');
-    }
-
+    await addAlimentation(animal_id, nourriture_donnée, quantité);
     return { type: 'success', text: 'Nourriture ajoutée avec succès.' };
   } catch (err) {
     console.error(err);
-    return { type: 'error', text: 'Une erreur est survenue, veuillez réessayer plus tard.' };
+    return { type: 'error', text: err.message || 'Une erreur est survenue, veuillez réessayer plus tard.' };
   }
 }
 

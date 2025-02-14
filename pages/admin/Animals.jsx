@@ -1,6 +1,6 @@
 import { useLoaderData, useSearchParams,useNavigate } from 'react-router';
 import AnimalComponent from '../../components/AnimalComponent';
-import { getAnimals } from '../../functions';
+import { deleteAnimal, getAnimals } from '../../functions';
 import { useEffect } from 'react';
 
 export async function loader() {
@@ -16,17 +16,12 @@ function Animals() {
 
     useEffect(()=>{
        console.log('useEffect lunched')
-    },[message])
+    },[])
 
     async function handleDelete(id){
         try {
-            const response = await fetch(`https://localhost:8000/api/animal/${id}`, {
-              method: "DELETE",
-            });
-            if (!response.ok) {
-                console.log('response not ok')
-              throw new Error("Erreur lors de la suppression de l'animal");
-            }
+
+           await deleteAnimal(id);
            navigate('?message=Animal Supprimé avec succes')
            
           } catch (error) {

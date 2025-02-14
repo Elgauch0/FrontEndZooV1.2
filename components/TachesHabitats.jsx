@@ -1,5 +1,5 @@
 import { useLoaderData, Form, useActionData } from "react-router";
-import { getHabitats } from "../functions";
+import { getHabitats, updateHabitatCommentaire} from "../functions";
 import { useState, useEffect } from "react";
 
 export async function loader() {
@@ -10,37 +10,25 @@ export async function action({ request }) {
     const formData = await request.formData();
     const id = formData.get("habitatId");
     const data = {
-        action: "editCommentaire",
-        commentaire: null,
+      action: "editCommentaire",
+      commentaire: null,
     };
-
+  
     try {
-        const response = await fetch(`https://localhost:8000/api/habitat/${id}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json();
-            return { erreur: true, message: "Problème serveur : le commentaire n'a pas pu être supprimé." };
-        }
-
-        return { erreur: false, message: "Commentaire supprimé avec succès !", habitatId: id };
+      await updateHabitatCommentaire(id, data);
+      return { erreur: false, message: "Commentaire supprimé avec succès !", habitatId: id };
     } catch (error) {
-        console.error("Erreur lors de la mise à jour de l'habitat :", error.message);
-        return { erreur: true, message: "Problème serveur : le commentaire n'a pas pu être supprimé." };
+      console.error("Erreur lors de la mise à jour de l'habitat :", error.message);
+      return { erreur: true, message: error.message || "Problème serveur : le commentaire n'a pas pu être supprimé." };
     }
-}
+  }
 
 function TachesHabitats() {
     const habitatsData = useLoaderData();
     const actionData = useActionData();
     const [habitats, setHabitats] = useState(habitatsData);
 
-    // Mettre à jour l'état local après la suppression
+    
     useEffect(() => {
         if (actionData && !actionData.erreur && actionData.habitatId) {
             console.log('useEffect')

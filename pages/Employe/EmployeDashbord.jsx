@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+
 import { useLoaderData} from 'react-router';
 import AdminService from '../../components/AdminService';
-import { getServices } from '../../functions';
+import { deleteService, getServices } from '../../functions';
+import { useState } from 'react';
 
 export async function loader() {
-    return getServices();
+    return await getServices();
 }
 
 function EmployeDashbord() {
@@ -13,28 +14,15 @@ function EmployeDashbord() {
 
     
     const handleDelete = async (id) => {
-        try {
-            const response = await fetch(`https://localhost:8000/api/services/${id}`, {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
-            });
-
-            if (!response.ok) {
-                throw new Error('Erreur lors de la suppression du service');
-            }
-
-            // Mettre à jour l'état local pour retirer le service supprimé
-            setServices(prevServices => prevServices.filter(service => service.id !== id));
-
-            console.log('Service supprimé avec succès');
-        } catch (error) {
-            console.error('Erreur:', error);
-        }
+       const success = await deleteService(id);
+       if(success){
+        setServices(prevServices => prevServices.filter(service => service.id !== id));
+       }
     };
 
     return (
            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-            {services?.map(service => (
+            {services && services.map(service => (
                 <AdminService 
                     key={service.id} 
                     id={service.id} 

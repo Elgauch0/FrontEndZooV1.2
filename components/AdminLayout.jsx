@@ -1,15 +1,14 @@
 import { Outlet,NavLink, redirect } from "react-router";
+import { requireAuth } from "../functions";
 
 
 
 
 export function loader(){
-  //desactiver le firewall le temps de faire les pages vet et admin
-  // const token = sessionStorage.getItem('token'); 
-  
-  // if(!token){
-  //   return redirect('/administration?message=Vous devez être connecté pour aller à cette page');
-  // }
+  const auth = requireAuth(); 
+  if(!auth){
+    return redirect('/administration?message=Vous devez être connecté pour aller à cette page');
+   }
   return null;
 }
 

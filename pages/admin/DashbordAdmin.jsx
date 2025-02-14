@@ -1,4 +1,4 @@
-import { useLoaderData, Form, redirect, useActionData ,useNavigation } from 'react-router';
+import { useLoaderData, Form, useActionData ,useNavigation } from 'react-router';
 import { getUsers, deleteUser, createUser } from '../../functions';
 import UserComponent from '../../components/UserComponent';
 import { useState,useRef, useEffect } from 'react';

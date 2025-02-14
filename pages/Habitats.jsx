@@ -1,10 +1,10 @@
 import Habitat from "../components/Habitat";
 
 function Habitats() {
-  //simuler pour le moments les habitats:
+  
   
 
-    // Données des habitats
+    
     const habitats = [
       { id: 1, nom: 'desert', description: 'desert description' },
       { id: 2, nom: 'foret', description: 'foret description' },

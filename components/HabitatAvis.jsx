@@ -1,5 +1,5 @@
 import { useLoaderData, Form, useActionData } from "react-router";
-import { getHabitats } from "../functions";
+import { addAvisVet, getHabitats } from "../functions";
 import { useEffect, useRef, useState } from "react";
 
 
@@ -18,27 +18,7 @@ export async function action({ request }) {
         commentaire: commentaire,
     };
 
-    try {
-        const response = await fetch(`https://localhost:8000/api/habitat/${id}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || "Erreur lors de la mise à jour de l'habitat");
-        }
-
-        // Retourner un message de succès
-        return { erreur: false, message: "Commentaire envoyé avec succès !" };
-    } catch (error) {
-        console.error("Erreur lors de la mise à jour de l'habitat :", error.message);
-        // Retourner un message d'erreur
-        return { erreur: true, message: "Problème serveur : le commentaire n'a pas pu être envoyé." };
-    }
+  return await addAvisVet(id,data)
 }
 
 function HabitatAvis() {

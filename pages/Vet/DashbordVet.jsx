@@ -32,7 +32,7 @@ const AlimentationList = () => {
   return (
     <div className="min-h-screen bg-green-50 p-8">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-green-700 mb-8">Liste des Alimentations</h1>
+        <h1 className="text-3xl font-bold text-green-700 mb-8">Alimentation donnée aux animaux</h1>
         <div className="space-y-6">
           {alimentations.map((alimentation) => (
             <ComponentAlimentation

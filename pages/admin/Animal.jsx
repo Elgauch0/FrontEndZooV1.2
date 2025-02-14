@@ -1,4 +1,5 @@
 import { useLocation, Form, redirect } from 'react-router';
+import { updateAnimal } from '../../functions';
 
 export async function action({ request, params }) {
     const formData = await request.formData();
@@ -8,17 +9,7 @@ export async function action({ request, params }) {
         habitatId: formData.get('habitatId'),
     };
 
-    const response = await fetch(`https://localhost:8000/api/animal/${params.id}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedAnimal),
-    });
-
-    if (!response.ok) {
-        throw new Error('Failed to update animal');
-    }
+     await updateAnimal(params.id,updatedAnimal);
     
     return redirect('/dashboardAdmin/animals?message=Animal modifié avec succès');
 }
