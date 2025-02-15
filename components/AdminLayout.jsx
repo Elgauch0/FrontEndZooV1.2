@@ -53,6 +53,12 @@ function AdminLayout() {
         >
           Comptes-rendus
         </NavLink>
+        <NavLink
+          to="habitats"
+          className={getNavLinkStyle}
+        >
+          Habitats
+        </NavLink>
       </nav>
 
       

@@ -1,138 +1,180 @@
 import { Link, useLoaderData, useSearchParams } from 'react-router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { getreviews } from '../functions';
 import Review from '../components/Review';
 import ReviewForm from '../components/ReviewForm';
+import ZooBienvenue from '../src/assets/ZooBienvenue.png';
 
-// Nombre d'avis par page
 const REVIEWS_PER_PAGE = 6;
 
 export async function loader() {
-  const data = await getreviews('valid');
-  return data;
+  return await getreviews('valid');
 }
 
 const Accueil = () => {
   const reviews = useLoaderData();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [currentPage, setCurrentPage] = useState(1);
-
-  // Récupération des messages d'erreur/succès depuis l'URL
   const message = searchParams.get('message');
   const error = searchParams.get('error');
 
-  // Calcul de la pagination
-  const totalPages = Math.ceil((reviews?.length || 0) / REVIEWS_PER_PAGE);
-  const startIndex = (currentPage - 1) * REVIEWS_PER_PAGE;
-  const endIndex = startIndex + REVIEWS_PER_PAGE;
-  const currentReviews = reviews?.slice(startIndex, endIndex) || [];
+  // Gestion automatique de la disparition des messages
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (message || error) {
+        searchParams.delete('message');
+        searchParams.delete('error');
+        setSearchParams(searchParams);
+      }
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, [message, error, searchParams, setSearchParams]);
 
-  // Composant de pagination
-  const Pagination = () => (
-    <div className="flex justify-center gap-2 mt-6">
-      <button
-        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-        disabled={currentPage === 1}
-        className="px-4 py-2 bg-green-800 text-white rounded-lg disabled:bg-gray-400"
-      >
-        Précédent
-      </button>
-      <span className="px-4 py-2">
-        Page {currentPage} sur {totalPages}
-      </span>
-      <button
-        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-        disabled={currentPage === totalPages}
-        className="px-4 py-2 bg-green-800 text-white rounded-lg disabled:bg-gray-400"
-      >
-        Suivant
-      </button>
-    </div>
-  );
-
-  // Section d'en-tête
-  const Header = () => (
-    <header className="bg-green-900 text-white py-20 text-center">
-      <h1 className="text-5xl font-bold">Bienvenue à Arcadia Zoo</h1>
-      <p className="mt-4 text-xl">
-        Découvrez un monde fascinant d'animaux et de nature.
-      </p>
-    </header>
-  );
-
-  // Section des avis
-  const ReviewsSection = () => (
-    <div className="my-8">
-      <h2 className="text-3xl text-green-900 text-center mb-6">Nos Avis</h2>
-      <div className="container mx-auto px-4">
-        <div className="flex flex-wrap justify-center gap-4">
-          {currentReviews.length > 0 ? (
-            currentReviews.map((review) => (
-              <Review
-                key={review.id}
-                id={review.id}
-                username={review.username}
-                avis={review.avis}
-              />
-            ))
-          ) : (
-            <p className="text-gray-600 text-center">Aucun avis pour le moment.</p>
-          )}
-        </div>
-        {reviews?.length > REVIEWS_PER_PAGE && <Pagination />}
-      </div>
-    </div>
-  );
-
-  // Navigation principale
-  const MainNavigation = () => (
-    <div className="mt-12 flex justify-center space-x-6">
-      <Link
-        to="/services"
-        className="bg-green-900 text-white py-3 px-6 rounded-lg hover:bg-green-800 transition-colors duration-300"
-      >
-        Nos Services
-      </Link>
-      <Link
-        to="/contact"
-        className="bg-green-900 text-white py-3 px-6 rounded-lg hover:bg-green-800 transition-colors duration-300"
-      >
-        Nous Contacter
-      </Link>
-    </div>
-  );
+  // Calculs de pagination
+  const totalItems = reviews?.length || 0;
+  const totalPages = Math.ceil(totalItems / REVIEWS_PER_PAGE);
+  const paginatedReviews = reviews?.slice(
+    (currentPage - 1) * REVIEWS_PER_PAGE,
+    currentPage * REVIEWS_PER_PAGE
+  ) || [];
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <Header />
-      
-      <div className="container mx-auto px-4 py-12">
-        <section className="text-center">
-          <h2 className="text-3xl font-bold text-green-900 mb-6">
-            Explorez Notre Zoo
+    <div className="min-h-screen bg-gray-50">
+      {/* Section Héro avec image */}
+      <header className="relative h-96 overflow-hidden">
+        <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+          <div className="text-center text-white px-4">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+              Bienvenue au Zoo Arcadia
+            </h1>
+            <p className="text-lg md:text-xl max-w-2xl mx-auto">
+              Un sanctuaire naturel où la biodiversité rencontre l'émerveillement
+            </p>
+          </div>
+        </div>
+        <img 
+          src={ZooBienvenue}
+          alt="Entrée majestueuse du zoo Arcadia"
+          className="w-full h-full object-cover"
+          loading="lazy"
+        />
+      </header>
+
+      {/* Contenu principal */}
+      <main className="container mx-auto px-4 py-12 max-w-7xl">
+        {/* Section présentation */}
+        <section className="mb-16 text-center">
+          <h2 className="text-3xl font-bold text-green-900 mb-8">
+            Explorez Notre Univers Sauvage
           </h2>
-          <p className="text-gray-700 max-w-2xl mx-auto">
-            Arcadia Zoo est un lieu magique où vous pouvez rencontrer des animaux 
-            incroyables, des habitats naturels reconstitués et participer à des 
-            activités éducatives pour toute la famille. Que vous soyez passionné 
-            de nature ou simplement curieux, notre zoo a quelque chose à vous offrir.
-          </p>
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div className="space-y-4 text-gray-700 text-lg">
+              <p>
+                Niché au cœur d'un écosystème préservé, Arcadia Zoo vous propose 
+                une immersion totale dans le monde animal. Parcourez nos habitats 
+                naturalistes et découvrez plus de 120 espèces à travers 5 zones 
+                climatiques recréées.
+              </p>
+              <p>
+                Nos programmes de conservation et de recherche contribuent 
+                activement à la protection des espèces menacées.
+              </p>
+            </div>
+            <div className="relative h-80 rounded-xl overflow-hidden shadow-xl">
+              <img 
+                src="https://images.unsplash.com/photo-1552410260-0fd9b577afa6" 
+                alt="Lion dans son habitat"
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </div>
+          </div>
         </section>
 
-        <ReviewsSection />
+        {/* Section avis */}
+        <section className="my-16">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-green-900 mb-2">
+              Témoignages de Nos Visiteurs
+            </h2>
+            <p className="text-gray-600 max-w-xl mx-auto">
+              Découvrez ce que nos visiteurs pensent de leur expérience au zoo
+            </p>
+          </div>
 
-        <div className="mt-6">
-          {message && (
-            <p className="text-green-500 font-bold text-center">{message}</p>
-          )}
-          {error && (
-            <p className="text-red-500 font-bold text-center">{error}</p>
-          )}
-          <ReviewForm />
-        </div>
+          {/* Liste des avis */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            {paginatedReviews.length > 0 ? (
+              paginatedReviews.map((review) => (
+                <Review key={review.id} {...review} />
+              ))
+            ) : (
+              <p className="col-span-full text-center text-gray-500 py-8">
+                Soyez le premier à partager votre expérience !
+              </p>
+            )}
+          </div>
 
-        <MainNavigation />
-      </div>
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="px-6 py-2 bg-green-800 text-white rounded-lg disabled:opacity-50 transition-opacity"
+              >
+                Précédent
+              </button>
+              <span className="flex items-center px-4">
+                Page {currentPage} / {totalPages}
+              </span>
+              <button
+                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+                className="px-6 py-2 bg-green-800 text-white rounded-lg disabled:opacity-50 transition-opacity"
+              >
+                Suivant
+              </button>
+            </div>
+          )}
+        </section>
+
+        {/* Formulaire d'avis */}
+        <section className="my-16">
+          <div className="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-lg">
+            <h3 className="text-2xl font-bold text-green-900 mb-6 text-center">
+              Partagez Votre Expérience
+            </h3>
+            {message && (
+              <p className="text-green-600 text-center mb-4 animate-fade-in">
+                {message}
+              </p>
+            )}
+            {error && (
+              <p className="text-red-500 text-center mb-4 animate-fade-in">
+                {error}
+              </p>
+            )}
+            <ReviewForm />
+          </div>
+        </section>
+
+        {/* Navigation */}
+        <nav className="flex flex-col sm:flex-row justify-center gap-6 mt-16">
+          <Link
+            to="/services"
+            className="bg-green-800 hover:bg-green-700 text-white px-8 py-4 rounded-lg text-lg font-medium transition-colors text-center"
+          >
+            Découvrir Nos Services
+          </Link>
+          <Link
+            to="/contact"
+            className="bg-green-800 hover:bg-green-700 text-white px-8 py-4 rounded-lg text-lg font-medium transition-colors text-center"
+          >
+            Planifier Votre Visite
+          </Link>
+        </nav>
+      </main>
     </div>
   );
 };

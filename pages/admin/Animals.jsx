@@ -1,7 +1,10 @@
-import { useLoaderData, useSearchParams,useNavigate } from 'react-router';
+import { useLoaderData, useSearchParams, useNavigate } from 'react-router';
 import AnimalComponent from '../../components/AnimalComponent';
 import { deleteAnimal, getAnimals } from '../../functions';
 import { useEffect } from 'react';
+
+
+
 
 export async function loader() {
     return await getAnimals();
@@ -13,22 +16,18 @@ function Animals() {
     const message = searchParams.get('message');
     const navigate = useNavigate();
 
+    useEffect(() => {
+        console.log('useEffect launched');
+    }, [message]);
 
-    useEffect(()=>{
-       console.log('useEffect lunched')
-    },[])
-
-    async function handleDelete(id){
+    async function handleDelete(id) {
         try {
-
-           await deleteAnimal(id);
-           navigate('?message=Animal Supprimé avec succes')
-           
-          } catch (error) {
+            await deleteAnimal(id);
+            navigate('?message=Animal Supprimé avec succes');
+        } catch (error) {
             console.error("Erreur:", error);
-          }
-    
-}
+        }
+    }
 
     return (
         <div className="min-h-screen bg-gray-100 p-8">
@@ -38,14 +37,11 @@ function Animals() {
                     {message}
                 </div>
             )}
-            <div className="space-y-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {animals && animals.map((animal) => (
                     <AnimalComponent
                         key={animal.id}
-                        id={animal.id}
-                        nom={animal.nom}
-                        description={animal.description}
-                        habitat={animal.habitat}
+                        animal={animal}
                         onDelete={handleDelete}
                     />
                 ))}

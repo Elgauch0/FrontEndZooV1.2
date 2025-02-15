@@ -1,28 +1,58 @@
-import Habitat from "../components/Habitat";
+// pages/Habitats.jsx
+import { useLoaderData } from 'react-router';
+import Habitat from '../components/Habitat';
+import { getHabitats } from '../functions';
 
-function Habitats() {
-  
-  
-
-    
-    const habitats = [
-      { id: 1, nom: 'desert', description: 'desert description' },
-      { id: 2, nom: 'foret', description: 'foret description' },
-      { id: 3, nom: 'jungle', description: 'jungle description' },
-      { id: 4, nom: 'savane', description: 'savane description' },
-    ];
-  const habitatsElements = habitats.map(habitat => (
-    <Habitat key ={habitat.id} nom = {habitat.nom} description={habitat.description} />
-  ))
-
-
-
-  return (
-    <div>
-        
-   {habitatsElements}
-    </div>
-  )
+export async function loader() {
+  return await getHabitats();
 }
 
-export default Habitats
+function Habitats() {
+  const habitats = useLoaderData();
+
+  return (
+    <div className="space-y-8 p-8 bg-gray-50 min-h-screen">
+      <h1 className="text-4xl font-bold text-green-900 text-center mb-8">
+        Liste des Habitats
+      </h1>
+
+      {habitats.map((habitat) => (
+        <div
+          key={habitat.id}
+          className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300"
+        >
+          {/* Composant Habitat avec image */}
+          <Habitat 
+            nom={habitat.nom} 
+            description={habitat.description}
+            imageName={habitat.imageName}
+          />
+
+          {/* Section animaux */}
+          <div className="mt-6">
+            <h3 className="text-2xl font-semibold text-green-800 mb-4 border-b-2 border-green-200 pb-2">
+              Animaux dans cet habitat
+            </h3>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {habitat.animaux.map((animal) => (
+                <li
+                  key={animal.id}
+                  className="bg-green-50 p-4 rounded-lg hover:bg-green-100 transition-colors duration-200"
+                >
+                  <div className="flex items-center space-x-3">
+                    <span className="text-green-600">🐾</span>
+                    <span className="text-lg font-medium text-green-900">
+                      {animal.nom}
+                    </span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export default Habitats;

@@ -1,6 +1,7 @@
 const  token =sessionStorage.getItem('token'); 
 const API_URL = 'https://localhost:8000/api/'; 
-
+const API_SOURCE ='https://localhost:8000/';
+export { API_SOURCE };
 
 
 export function requireAuth() {
@@ -18,6 +19,7 @@ export async function login({username,password}){
         });
     
         if (response.ok) {
+          
           const {token} = await response.json();
           return token;
 
@@ -273,6 +275,77 @@ export async function getHabitats() {
     throw new Error('Erreur lors de la récupération des habitats');
   }
 }
+export async function deleteHabitat(id){
+try {
+  const response = await fetch(API_URL+`administration/habitat/${id}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }
+  });
+  if (!response.ok) {
+    throw new Error('Erreur lors de la suppression de l\'utilisateur');
+  }
+  return true;
+}catch(err){
+console.error(err);
+return false
+
+}
+}
+export async function updateHabitat({nom,description,imageFile}, habitatId) {
+  const formData = new FormData();
+  formData.append('nom', nom);
+  formData.append('description', description);
+  if (imageFile) {
+    formData.append('imageFile', imageFile);
+}
+  try {
+    const response = await fetch(API_URL+`administration/habitat/${habitatId}`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`
+         },
+
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Échec de la mise à jour');
+    }
+
+    return redirect(`habitats?message=Habitat édité`);
+  } catch (error) {
+    return { error: error.message };
+  }
+}
+export async function createHabitat({nom,description,imageFile}) {
+  const formData = new FormData();
+  formData.append('nom', nom);
+  formData.append('description', description);
+  formData.append('imageFile', imageFile);
+  try {
+    const response = await fetch(API_URL + 'administration/habitat/add', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Échec de la création');
+    }
+
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+}
 
 
 export async function getUsers() {
@@ -293,8 +366,6 @@ export async function getUsers() {
      console.error('Erreur lors de la récupération des utilisateurs:', error);
   }
 }
-
-
 
 
 export async function deleteUser(id) {
@@ -357,15 +428,21 @@ export async function getComptesR() {
   }
 }
 
-export async function updateAnimal(id,updatedAnimal) {
+export async function updateAnimal(id,{nom,description,habitatId,imageFile}) {
+  const formData = new FormData();
+  formData.append('nom', nom);
+  formData.append('description', description);
+  formData.append('habitatId', habitatId);
+  if (imageFile) {
+      formData.append('imageFile', imageFile);
+  }
   const response = await fetch(API_URL+`administration/animal/${id}`, {
-    method: 'PUT',
+    method: 'POST',
     headers: {
-        'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
         
     },
-    body: JSON.stringify(updatedAnimal),
+    body: formData,
 });
 
 if (!response.ok) {
@@ -373,23 +450,24 @@ if (!response.ok) {
 }
   
 }
-export async function addAnimal(newAnimal) 
-{
-  const response = await fetch(API_URL+"administration/animal/add", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json",
-        'Authorization': `Bearer ${token}`
-     },
-    body: JSON.stringify(newAnimal),
-});
+export async function addAnimal(formData) {
+ 
+  const response = await fetch(API_URL + "administration/animal/add", {
+      method: "POST",
+      headers: {
+          'Authorization': `Bearer ${token}`
+      },
+      body: formData
+  });
 
-if (!response.ok) {
-    throw new Error("Erreur lors de l'ajout de l'animal");
-}  
+  if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Erreur lors de l'ajout de l'animal");
+  }
 }
 
 export async function deleteAnimal(id) {
+  console.log(token)
   const response = await fetch(API_URL+`administration/animal/${id}`, {
     method: "DELETE",
     headers:{ 

@@ -2,7 +2,7 @@ import { createBrowserRouter, createRoutesFromElements,Route, RouterProvider } f
 import Layout from "../components/Layout"
 import Home,{loader as homeLoader} from "../pages/Home"
 import Service,{loader as serviceLoader} from "../pages/Service";
-import Habitats from "../pages/Habitats";
+import Habitats,{loader as habitatLoader} from "../pages/Habitats";
 import Administration,{action as loginAction,loader as loginLoader} from "../pages/Administration";
 import Contact ,{action as contactAction}from "../pages/Contact";
 import NotFound from "../pages/NotFound";
@@ -27,6 +27,10 @@ import AnimalLayout from "../components/AnimalLayout";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import AddAnimal,{loader as addAnimalLoader,action as addAnimalAction} from "../pages/admin/AddAnimal";
 import ComptesRendus , {loader as compteRenduLoader}from "../pages/admin/ComptesRendus";
+import ShowHabitatAdmin,{loader as habitatAdminLoader} from '../pages/admin/ShowHabitatAdmin'
+import HabitatAdminLayout from "../components/HabitatAdminLayout";
+import HabitatDetail ,{action as habitatDetailAction}from "../pages/admin/HabitatDetail";
+import AddHabitatForm ,{action as addHabitatAction }from "../pages/admin/AddHabitat";
 
 
 
@@ -38,7 +42,7 @@ function App() {
     <Route path='/' element={<Layout />} errorElement={< ErrorElement/>}>
     <Route index element={<Home/>} loader={homeLoader} action={reviewAction} />
     <Route path="services"element={<Service/>} loader={serviceLoader}  />
-    <Route path="habitats"element={<Habitats />} />
+    <Route path="habitats"element={<Habitats />}  loader={habitatLoader}/>
     <Route path="contact"element={<Contact/>} action={contactAction} />
     <Route path="administration"element={<Administration/>} loader={loginLoader} action={loginAction}/>
     
@@ -56,10 +60,20 @@ function App() {
      <Route path="add" element={<AddAnimal />} loader={addAnimalLoader} action={addAnimalAction} />
      </Route>
 
-     <Route path="rapports"  element={<ComptesRendus />} loader={compteRenduLoader}>
+     <Route path="rapports"  element={<ComptesRendus />} loader={compteRenduLoader}/>
+
+
+     <Route path="habitats" element={<HabitatAdminLayout/>} >
+     <Route index  element={< ShowHabitatAdmin/>} loader={habitatAdminLoader} />
+     <Route path=":id" element={< HabitatDetail/>} action={habitatDetailAction}/>
+     <Route path="add" element={<AddHabitatForm />}  action={addHabitatAction}/>
+     
+     
+     
+     </Route>
      
 
-     </Route>
+     
 
 
      </Route>
