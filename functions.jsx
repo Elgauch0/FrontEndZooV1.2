@@ -4,10 +4,36 @@ const API_SOURCE ='https://localhost:8000/';
 export { API_SOURCE };
 
 
+// export function requireAuth() {
+//   const token = sessionStorage.getItem('token');
+//   return !!token;  
+// }
+
 export function requireAuth() {
   const token = sessionStorage.getItem('token');
-  return !!token;  
+  if (!token) {
+    return false;
+  }
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    if (payload.exp < Date.now() / 1000) {
+      sessionStorage.removeItem('token');
+      return false;
+    }
+    
+    return true;
+  } catch {
+    
+    sessionStorage.removeItem('token');
+    return false;
+  }
 }
+
+  
+
+
+
+
 export async function login({username,password}){
     try {
         const response = await fetch('https://localhost:8000/api/login', {
@@ -100,6 +126,31 @@ export async function addService({ nom, description }) {
   }
 }
 
+export async function putService(id,{nom,description}) {
+  
+  try{
+    const response = await fetch(API_URL+`administration/services/${id}`, {
+      method: 'put',
+      headers: { 'Content-Type': 'application/json',
+                 'Authorization': `Bearer ${token}`
+       },
+      body: JSON.stringify({ nom, description }),
+  });
+
+  if (!response.ok) {
+      return false;
+  }
+
+
+   return true;
+
+  }catch(err){
+    console.error(err);
+    return false
+  }
+}
+
+
 
 export async function getreviews(pathname){
   const admin = pathname ==="nvalid" ? 'administration/': '';
@@ -142,24 +193,6 @@ export async function addAlimentation(animal_id, nourriture_donnée, quantité) 
       throw new Error("Requête incorrecte. Veuillez vérifier les données saisies.");
     }
     throw new Error('Erreur de réponse');
-  }
-
-  return response.json();
-}
-export async function updateHabitatCommentaire(id, data) {
-  const response = await fetch(API_URL+`administration/habitat/${id}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      'Authorization': `Bearer ${token}`
-
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.message || "Problème serveur : le commentaire n'a pas pu être mis à jour.");
   }
 
   return response.json();
@@ -313,12 +346,12 @@ export async function updateHabitat({nom,description,imageFile}, habitatId) {
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || 'Échec de la mise à jour');
+     return  { error:true, text: errorData?.message };
     }
 
-    return redirect(`habitats?message=Habitat édité`);
+    return {error:false,text:'habitat edité avec succes'};
   } catch (error) {
-    return { error: error.message };
+    return { error:true, text: error.message };
   }
 }
 export async function createHabitat({nom,description,imageFile}) {
@@ -503,9 +536,9 @@ export async function addRapport({ etat, nourriture, autreDetail, animalId }) {
   
 }
 
-export async function addAvisVet(id,data) {
+export async function addTache(id,data) {
   try {
-    const response = await fetch(API_URL+`administration/habitat/${id}`, {
+    const response = await fetch(API_URL+`administration/habitat/avis/${id}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json",
@@ -513,6 +546,7 @@ export async function addAvisVet(id,data) {
         },
         body: JSON.stringify(data),
     });
+    console.log(response);
 
     if (!response.ok) {
         const errorData = await response.json();
@@ -520,7 +554,7 @@ export async function addAvisVet(id,data) {
     }
 
     
-    return { erreur: false, message: "Commentaire envoyé avec succès !" };
+    return { erreur: false, message: "mise a jour de l habitat avec  succès !" };
 } catch (error) {
     console.error("Erreur lors de la mise à jour de l'habitat :", error.message);
     // Retourner un message d'erreur

@@ -1,6 +1,6 @@
-import { useLocation, Form } from 'react-router';
+import { useLocation, Form, redirect } from 'react-router';
 import habitatParDefault from '../../src/assets/habitatParDefault.jfif';
-import { updateHabitat } from '../../functions';
+import { updateHabitat ,API_SOURCE} from '../../functions';
 
 
 export async function action({ request, params }) {
@@ -8,7 +8,9 @@ export async function action({ request, params }) {
   const nom = formData.get('nom');
   const description=formData.get('description');
   const imageFile = formData.get('imageFile');
-  return updateHabitat({nom,description,imageFile}, params.id);
+  const response =  await updateHabitat({nom,description,imageFile}, params.id);
+  
+   return redirect(`/dashboardAdmin/habitats?error=${response.error}&message=${response.text}`);
 }
 
 
@@ -16,12 +18,15 @@ export async function action({ request, params }) {
 function HabitatDetail() {
   const location = useLocation();
   const habitat = location.state?.habitat;
+  
 
-  if (!habitat) {
-    return <div>Habitat non trouvé.</div>;
-  }
+  
+    if (!habitat) {
+      navigate('/dashboardAdmin/habitats?',{replace:true}); 
+    }
+  
 
-  const imageUrl = habitat.imageName
+  const imageUrl = habitat?.imageName
     ? `${API_SOURCE}/uploads/images/habitats/${habitat.imageName}`
     : habitatParDefault;
 

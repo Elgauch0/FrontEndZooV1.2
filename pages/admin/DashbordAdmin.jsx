@@ -1,11 +1,15 @@
 import { useLoaderData, Form, useActionData ,useNavigation } from 'react-router';
-import { getUsers, deleteUser, createUser } from '../../functions';
+import { getUsers, deleteUser, createUser,requireAuth } from '../../functions';
 import UserComponent from '../../components/UserComponent';
 import { useState,useRef, useEffect } from 'react';
 
 
 
 export async function loader() {
+  
+  if(!requireAuth()){
+    return redirect('/administration?message=Vous devez être connecté pour aller à cette page');
+   }
   return await getUsers();
 }
 

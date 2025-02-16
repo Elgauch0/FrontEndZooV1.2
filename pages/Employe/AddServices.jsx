@@ -1,5 +1,6 @@
 import { Form, useActionData } from "react-router";
 import { addService } from "../../functions";
+import { useEffect, useRef } from "react";
 
 export async function action({ request }) {
   const formData = await request.formData();
@@ -15,10 +16,19 @@ export async function action({ request }) {
 
 function AddServices() {
   const actionData = useActionData();
+  const formRef =useRef();
+
+
+  useEffect(()=>{
+    formRef.current.reset()
+  }
+    ,[actionData])
+
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <Form method="post" className="bg-green-900 p-8 rounded-lg shadow-md w-full max-w-md">
+      <Form method="post" ref={formRef} className="bg-green-900 p-8 rounded-lg shadow-md w-full max-w-md">
         <h1 className="text-2xl font-bold text-gray-50 mb-6">Ajouter un nouveau service</h1>
 
         

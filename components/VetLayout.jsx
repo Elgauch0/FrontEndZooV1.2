@@ -29,7 +29,7 @@ function VetLayout() {
           to="avis"
           className={getNavLinkStyle}
         >
-          Avis
+          commentaires habitats
         </NavLink>
         </nav>
         

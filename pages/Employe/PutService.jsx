@@ -1,33 +1,25 @@
 import { Form,useLocation,redirect,useNavigate} from "react-router";
+import { putService } from "../../functions";
+
+
 
 
 
 export async function action({ request, params }) {
   const formData = await request.formData();
-
   const nom = formData.get('nom');
   const description = formData.get('description');
-  
   const { id } = params;
 
-  try {
-      const response = await fetch(`https://localhost:8000/api/services/${id}`, {
-          method: 'put',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ nom, description }),
-      });
+  const success = await putService(id, { nom, description });
 
-      if (!response.ok) {
-          throw new Error('Erreur lors de la modification du service');
-      }
-
-      
-      return redirect('/dashboardEmployee');
-  } catch (error) {
-      console.error('Erreur:', error);
-      return { error: 'Une erreur s\'est produite lors de la mise à jour du service' };
+  if (success) {
+    return redirect(`/dashboardEmployee?error=false&message=${encodeURIComponent('Service modifié avec succès')}`);
+  } else {
+    return redirect(`/dashboardEmployee?error=true&message=${encodeURIComponent('Erreur lors de la modification du service')}`);
   }
 }
+
 
 
 
@@ -35,19 +27,23 @@ export async function action({ request, params }) {
 function PutService() {
   const location =useLocation();
   const navigate = useNavigate();
+  
+
   if (!location.state || !location.state.nom || !location.state.description) {
     navigate('/dashboardEmployee');
     return null;
 }
 
    const { nom, description } = location.state;
+
+
   
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-green-900">
           <Form method="put" className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
             <div className="mb-4">
-            <h1 className="text-2xl font-bold text-green-900 mb-4">Editet un service</h1>
+            <h1 className="text-2xl font-bold text-green-900 mb-4">Editer un service</h1>
           
               <label htmlFor="nom" className="block text-sm font-medium text-gray-700">Nom:</label>
               <input

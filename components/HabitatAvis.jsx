@@ -1,5 +1,5 @@
 import { useLoaderData, Form, useActionData } from "react-router";
-import { addAvisVet, getHabitats } from "../functions";
+import { addTache, getHabitats } from "../functions";
 import { useEffect, useRef, useState } from "react";
 
 
@@ -18,7 +18,7 @@ export async function action({ request }) {
         commentaire: commentaire,
     };
 
-  return await addAvisVet(id,data)
+  return await addTache(id,data)
 }
 
 function HabitatAvis() {

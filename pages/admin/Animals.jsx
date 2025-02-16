@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 
 
 export async function loader() {
+    
     return await getAnimals();
 }
 

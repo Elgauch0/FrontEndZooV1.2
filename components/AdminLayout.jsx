@@ -5,8 +5,8 @@ import { requireAuth } from "../functions";
 
 
 export function loader(){
-  const auth = requireAuth(); 
-  if(!auth){
+   
+  if(!requireAuth()){
     return redirect('/administration?message=Vous devez être connecté pour aller à cette page');
    }
   return null;
