@@ -1,12 +1,11 @@
 import { Outlet,NavLink, redirect } from "react-router";
-import { requireAuth } from "../functions";
+import { requireAuth  } from "../functions";
 
 
 
 
-export function loader(){
-   
-  if(!requireAuth()){
+export async  function loader(){
+   if(!requireAuth()){
     return redirect('/administration?message=Vous devez être connecté pour aller à cette page');
    }
   return null;
@@ -15,7 +14,6 @@ export function loader(){
 
 
 function AdminLayout() {
- 
   const getNavLinkStyle = ({ isActive }) => 
     isActive
       ? "text-white bg-green-700 px-3 py-2 rounded-md text-sm font-medium" 

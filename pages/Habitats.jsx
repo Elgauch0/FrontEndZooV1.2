@@ -1,5 +1,5 @@
 // pages/Habitats.jsx
-import { useLoaderData } from 'react-router';
+import { useLoaderData ,Link} from 'react-router';
 import Habitat from '../components/Habitat';
 import { getHabitats } from '../functions';
 
@@ -39,12 +39,12 @@ function Habitats() {
                   key={animal.id}
                   className="bg-green-50 p-4 rounded-lg hover:bg-green-100 transition-colors duration-200"
                 >
-                  <div className="flex items-center space-x-3">
-                    <span className="text-green-600">🐾</span>
-                    <span className="text-lg font-medium text-green-900">
-                      {animal.nom}
-                    </span>
-                  </div>
+                  <Link to={`/animal/${animal.id}`} className="flex items-center space-x-3">
+                  <span className="text-green-600">🐾</span>
+                  <span className="text-lg font-medium text-green-900">
+                  {animal.nom}
+                  </span>
+                  </Link>
                 </li>
               ))}
             </ul>

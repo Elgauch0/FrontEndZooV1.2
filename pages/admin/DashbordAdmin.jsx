@@ -35,19 +35,22 @@ export async function action({ request }) {
 function DashboardAdmin() {
   const initialUsers = useLoaderData();
   const actionData = useActionData();
-  const [users, setUsers] = useState(initialUsers);
+  const [users, setUsers] = useState(initialUsers || []);
   const [deleteError, setDeleteError] = useState(null);
   const navigation = useNavigation();
   const formRef = useRef();
 
-
-  useEffect(()=>{
+  useEffect(() => {
     formRef.current.reset();
-    getUsers().then(users => setUsers(users));
     
+    getUsers()
+      .then(fetchedUsers => {
+        setUsers(fetchedUsers || []);
+      })
+      .catch(() => setUsers([])); 
+  }, [actionData]);
 
-  },[actionData])
-
+  
   async function handleDelete(id) {
     if (window.confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
       try {

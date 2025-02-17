@@ -29,10 +29,27 @@ export function requireAuth() {
   }
 }
 
-  
 
 
 
+export  async function getStatistic(){
+  try{
+    const response = await fetch(API_URL+'administration/visits',{
+      method:'GET',
+      headers:{ 'Content-Type': 'application/json',
+               'Authorization': `Bearer ${token}`
+               },
+           });
+           if(!response.ok){
+            throw new Error('Failed Response from server.');
+           }
+          const data = await response.json();
+          return data;
+      }catch (error) {
+        console.error('Erreur:', error);
+        return null;
+    }
+}
 
 export async function login({username,password}){
     try {
@@ -47,6 +64,7 @@ export async function login({username,password}){
         if (response.ok) {
           
           const {token} = await response.json();
+          console.log(token);
           return token;
 
         }else {
@@ -497,6 +515,23 @@ export async function addAnimal(formData) {
       const errorData = await response.json();
       throw new Error(errorData.message || "Erreur lors de l'ajout de l'animal");
   }
+}
+export async function getAnimal(id) {
+  try {
+    const response = await fetch(API_URL +`animal/${id}`,{
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json',
+      },
+
+    });
+    if (!response.ok) {
+      throw new Error('Une erreur dans le fetch ou serveur non accessible');
+    }
+    const animals = await response.json();
+    return animals;
+  } catch (err) {
+    console.error('Erreur lors de la récupération des animaux:', err);
+  }  
 }
 
 export async function deleteAnimal(id) {

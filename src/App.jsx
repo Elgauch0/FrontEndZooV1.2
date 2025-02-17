@@ -24,13 +24,14 @@ import TachesHabitats ,{loader as tachesHabitatsLoader,action as tachesHabitatsA
 import Animals,{loader as animalLoader} from "../pages/admin/Animals";
 import Animal,{action as animalAction}from '../pages/admin/Animal'
 import AnimalLayout from "../components/AnimalLayout";
-import AdminDashboard from "../pages/admin/AdminDashboard";
+import AdminDashboard ,{loader as adminDashboardLoader}from "../pages/admin/AdminDashboard";
 import AddAnimal,{loader as addAnimalLoader,action as addAnimalAction} from "../pages/admin/AddAnimal";
 import ComptesRendus , {loader as compteRenduLoader}from "../pages/admin/ComptesRendus";
 import ShowHabitatAdmin,{loader as habitatAdminLoader} from '../pages/admin/ShowHabitatAdmin'
 import HabitatAdminLayout from "../components/HabitatAdminLayout";
 import HabitatDetail ,{action as habitatDetailAction}from "../pages/admin/HabitatDetail";
 import AddHabitatForm ,{action as addHabitatAction }from "../pages/admin/AddHabitat";
+import GetAnimal ,{loader as getAnimalLoader} from "../pages/GetAnimal";
 
 
 
@@ -43,15 +44,17 @@ function App() {
     <Route index element={<Home/>} loader={homeLoader} action={reviewAction} />
     <Route path="services"element={<Service/>} loader={serviceLoader}  />
     <Route path="habitats"element={<Habitats />}  loader={habitatLoader}/>
+    
     <Route path="contact"element={<Contact/>} action={contactAction} />
     <Route path="administration"element={<Administration/>} loader={loginLoader} action={loginAction}/>
+    <Route path="animal/:id" element={<GetAnimal/>} loader={getAnimalLoader} />
     
     
 
     {/**###################################################### ADMin Dashboard ####################################################### */}
 
      <Route  path="dashboardAdmin" element={<AdminLayout/>} loader={requreAuth}>
-     <Route index element={<AdminDashboard/>}  />
+     <Route index element={<AdminDashboard/>} loader={adminDashboardLoader} />
      <Route  path="users" element={<DashbordAdmin/>}  loader={dashboardAdminloader} action={dashboardAdminAction}/>
 
      <Route path="animals"element={<AnimalLayout/>} >

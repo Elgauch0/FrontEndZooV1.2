@@ -10,7 +10,9 @@ export async function loader() {
 
 export function Reviews() {
   const reviewsInitial = useLoaderData();
-  const [reviews, setReviews] = useState(reviewsInitial);
+  const [reviews, setReviews] = useState(reviewsInitial || []);
+
+
 
   async function handleCLick(id, action) {
     try {
@@ -23,7 +25,7 @@ export function Reviews() {
     }
   }
 
-  const reviewsElements = reviews?.map((review) => (
+  const reviewsElements = reviews.map((review) => (
     <AdminReview
       key={review.id}
       id={review.id}
