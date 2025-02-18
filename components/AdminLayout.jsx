@@ -57,6 +57,12 @@ function AdminLayout() {
         >
           Habitats
         </NavLink>
+        <NavLink
+          to="horaire"
+          className={getNavLinkStyle}
+        >
+          Horaires
+        </NavLink>
       </nav>
 
       

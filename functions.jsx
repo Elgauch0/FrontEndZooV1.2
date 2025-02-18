@@ -30,8 +30,6 @@ export function requireAuth() {
 }
 
 
-
-
 export  async function getStatistic(){
   try{
     const response = await fetch(API_URL+'administration/visits',{
@@ -64,7 +62,6 @@ export async function login({username,password}){
         if (response.ok) {
           
           const {token} = await response.json();
-          console.log(token);
           return token;
 
         }else {
@@ -278,6 +275,46 @@ export async function getAnimals() {
   }
 }
 
+export async function getHoraire(){
+  try {
+    const response = await fetch(API_URL +'horaire',{
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json',
+      },
+
+    });
+    if (!response.ok) {
+      throw new Error('Une erreur dans le fetch ou serveur non accessible');
+    }
+    const horaire = await response.json();
+    return horaire;
+  } catch (err) {
+    console.error('Erreur lors de la récupération des animaux:', err);
+  }
+}
+
+export async function putHoraire(id,horaireData){
+  try{  const response = await fetch(API_URL +`administration/horaire/${id}`, {
+    method: 'PUT',
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify(horaireData),
+});
+
+if (!response.ok) {
+    const error = await response.json();
+    return {error:true , text:'erreur response'};
+}
+
+  }catch(err){
+    console.error(err);
+    return {error:true , text:'erreur catch'};
+  }
+
+}
+
 
 export async function getRapports(page=1,limit=10){
   const baseUrl = API_URL+'administration/alimentation';
@@ -397,6 +434,8 @@ export async function createHabitat({nom,description,imageFile}) {
     return false;
   }
 }
+
+
 
 
 export async function getUsers() {

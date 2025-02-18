@@ -16,13 +16,19 @@ const Footer = () => {
           <div className="mb-8 md:mb-0">
             <h3 className="text-lg font-semibold text-white mb-4">Explorer</h3>
             <ul className="space-y-2">
-              {['À propos', 'Services', 'Habitats', 'Contact'].map((item) => (
-                <li key={item}>
+              {[
+                  { name:'Horaires', link:'/horaire' },
+                  { name: 'Services', link: '/services' },
+                  { name: 'Habitats', link: '/habitats' },
+                  { name: 'Contact', link: '/contact' },
+                  
+                   ].map((item) => (
+                <li key={item.name}>
                   <a 
-                    href="#" 
+                    href={item.link}
                     className="text-green-100 hover:text-white transition-colors text-sm"
                   >
-                    {item}
+                    {item.name}
                   </a>
                 </li>
               ))}

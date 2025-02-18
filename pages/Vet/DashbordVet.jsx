@@ -1,7 +1,7 @@
 import { useLoaderData,useNavigate } from 'react-router';
 import ComponentAlimentation from '../../components/ComponentAlimentation';
 import { getRapports } from '../../functions';
-import { useState } from 'react';
+import { useState ,useEffect} from 'react';
 
 export async function loader({ request }) {
   const url = new URL(request.url);
@@ -18,6 +18,12 @@ const AlimentationList = () => {
   const limit = 9; 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (alimentations == null) {
+      setPage(1);
+    }
+  }, 
+)
  
   const loadPage = async (newPage) => {
     const data = await getRapports(newPage, limit);

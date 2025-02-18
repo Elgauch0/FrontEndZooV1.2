@@ -32,6 +32,8 @@ import HabitatAdminLayout from "../components/HabitatAdminLayout";
 import HabitatDetail ,{action as habitatDetailAction}from "../pages/admin/HabitatDetail";
 import AddHabitatForm ,{action as addHabitatAction }from "../pages/admin/AddHabitat";
 import GetAnimal ,{loader as getAnimalLoader} from "../pages/GetAnimal";
+import Horaires,{loader as horaireLoader} from "../pages/Horaires";
+import HoraireAdmin,{action as horaireAdminAction} from '../components/HoraireAdmin';
 
 
 
@@ -47,6 +49,8 @@ function App() {
     
     <Route path="contact"element={<Contact/>} action={contactAction} />
     <Route path="administration"element={<Administration/>} loader={loginLoader} action={loginAction}/>
+    <Route path="horaire" element ={<Horaires />} loader={horaireLoader} />
+    
     <Route path="animal/:id" element={<GetAnimal/>} loader={getAnimalLoader} />
     
     
@@ -64,16 +68,14 @@ function App() {
      </Route>
 
      <Route path="rapports"  element={<ComptesRendus />} loader={compteRenduLoader}/>
-
+     <Route path="horaire" element={< HoraireAdmin/>} loader={horaireLoader}  action ={horaireAdminAction}/>
 
      <Route path="habitats" element={<HabitatAdminLayout/>} >
      <Route index  element={< ShowHabitatAdmin/>} loader={habitatAdminLoader} />
      <Route path=":id" element={< HabitatDetail/>} action={habitatDetailAction}/>
-     <Route path="add" element={<AddHabitatForm />}  action={addHabitatAction}/>
-     
-     
-     
+     <Route path="add" element={<AddHabitatForm />}  action={addHabitatAction}/> 
      </Route>
+     
      
 
      

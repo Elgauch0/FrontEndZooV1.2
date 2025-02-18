@@ -4,6 +4,7 @@ import { getreviews } from '../functions';
 import Review from '../components/Review';
 import ReviewForm from '../components/ReviewForm';
 import ZooBienvenue from '../src/assets/ZooBienvenue.png';
+import trainHabitats from '../src/assets/trainHabitat.jpeg';
 
 const REVIEWS_PER_PAGE = 6;
 
@@ -70,10 +71,10 @@ const Accueil = () => {
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div className="space-y-4 text-gray-700 text-lg">
               <p>
-                Niché au cœur d'un écosystème préservé, Arcadia Zoo vous propose 
-                une immersion totale dans le monde animal. Parcourez nos habitats 
-                naturalistes et découvrez plus de 120 espèces à travers 5 zones 
-                climatiques recréées.
+              Venez découvrir notre Zoo au cœur de la forêt de Brocéliande situez en Bretagne,
+              Évadez-vous et partez à la rencontre de plus de 200 espèces animal issue de la faune mondiale répartis sur
+             18 hectares, depuis 50 ans Arcadia s'engage auprès de l'écologie, au maintien de la biodiversité et à la
+             conservation des espèces
               </p>
               <p>
                 Nos programmes de conservation et de recherche contribuent 
@@ -89,6 +90,30 @@ const Accueil = () => {
               />
             </div>
           </div>
+        </section>
+
+        {/* Section train des habitats - NOUVELLE SECTION */}
+        <section className="my-16">
+          <Link to="/habitats" className="block group">
+            <div className="relative h-80 w-full rounded-xl overflow-hidden shadow-xl">
+              <img 
+                src={trainHabitats}
+                alt="Train des habitats du zoo Arcadia"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-black/40 group-hover:bg-black/30 transition-colors flex items-center justify-center">
+                <div className="text-center">
+                  <h3 className="text-2xl md:text-3xl font-bold text-white mb-4 transform group-hover:scale-110 transition-transform">
+                    Découvrez Nos Habitats
+                  </h3>
+                  <p className="inline-block bg-green-800 text-white px-4 py-2 rounded-lg shadow-md group-hover:bg-green-700 transition-colors">
+                    Cliquez pour visiter
+                  </p>
+                </div>
+              </div>
+            </div>
+          </Link>
         </section>
 
         {/* Section avis */}
