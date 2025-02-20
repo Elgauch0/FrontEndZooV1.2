@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import { API_SOURCE } from "../functions";
-import photoparDefault from '../src/assets/photoparDefault.png';
+import photoparDefault from '../public/photoparDefault.jpg';
 
 function AnimalComponent({ animal, onDelete }) {
     const state = {

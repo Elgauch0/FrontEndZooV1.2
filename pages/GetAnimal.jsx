@@ -1,6 +1,6 @@
 import { useLoaderData } from "react-router";
 import { getAnimal, API_SOURCE } from "../functions";
-import photoparDefault from "../src/assets/photoParDefault.png";
+import photoparDefault from "../public/photoparDefault.jpg";
 
 // Loader asynchrone pour récupérer l'animal via son id
 export async function loader({ params }) {

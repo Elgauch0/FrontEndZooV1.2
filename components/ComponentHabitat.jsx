@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import habitatParDefault from '../src/assets/habitatParDefault.jfif';
+import habitatParDefault from '../public/habitatParDefault.jpg';
 import { API_SOURCE } from '../functions';
 
 function HabitatComponent({ habitat, onDelete }) {

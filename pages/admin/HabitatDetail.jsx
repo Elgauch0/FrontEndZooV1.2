@@ -1,5 +1,5 @@
 import { useLocation, Form, redirect } from 'react-router';
-import habitatParDefault from '../../src/assets/habitatParDefault.jfif';
+import habitatParDefault from '../../public/habitatParDefault.jpg';
 import { updateHabitat ,API_SOURCE} from '../../functions';
 
 

@@ -3,8 +3,8 @@ import { useState, useEffect } from 'react';
 import { getreviews } from '../functions';
 import Review from '../components/Review';
 import ReviewForm from '../components/ReviewForm';
-import ZooBienvenue from '../src/assets/ZooBienvenue.png';
-import trainHabitats from '../src/assets/trainHabitat.jpeg';
+import ZooBienvenue from '../public/ZooBienvenue.jpg';
+import trainHabitats from '../public/trainHabitats.jpg';
 
 const REVIEWS_PER_PAGE = 6;
 
