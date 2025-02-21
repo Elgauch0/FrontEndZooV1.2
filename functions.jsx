@@ -1,6 +1,7 @@
+
 const  token =sessionStorage.getItem('token'); 
-const API_URL = 'https://localhost:8000/api/'; 
-const API_SOURCE ='https://localhost:8000/';
+const API_URL = import.meta.env.VITE_API_URL;
+const API_SOURCE = import.meta.env.VITE_API_SOURCE
 export { API_SOURCE };
 
 
