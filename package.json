@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "npm run update-browserslist && npm run build:tailwind && vite build",
-    "build:tailwind": "npx @tailwindcss/cli -i input.css -o output.css",
+    "build:tailwind": "npx @tailwindcss/cli -i ./styles.css -o dist/output.css",
     "update-browserslist": "npx update-browserslist-db@latest",
     "lint": "eslint .",
     "preview": "vite preview"
