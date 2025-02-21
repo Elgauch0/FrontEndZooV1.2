@@ -1,5 +1,5 @@
 
-import habitatParDefault from '../public/habitatParDefault.jpg';
+import habitatParDefault from '~public/habitatParDefault.jpg';
 import { API_SOURCE } from '../functions';
 
 const Habitat = ({ nom, description, imageName }) => {
