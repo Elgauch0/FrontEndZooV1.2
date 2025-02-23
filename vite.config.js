@@ -5,13 +5,29 @@ import path from 'path';
 
 export default defineConfig({
   plugins: [react(),tailwindcss()],
-  
-  publicDir: 'public',
   resolve: {
     alias: {
-      '~public': path.resolve(__dirname, './public') 
+      '@': path.resolve(__dirname, './src'),
+      '@components': path.resolve(__dirname, './src/components'),
+      '@pages': path.resolve(__dirname, './src/pages'),
+      '@functions': path.resolve(__dirname, './src/functions.js'),
+      '@assets': path.resolve(__dirname, './public'),  
     }
+   },
+  
+  build: {
+    assetsDir: 'assets',
+    manifest: true
   },
+  server: {
+    host: '0.0.0.0',
+    watch: {
+      usePolling:true
+
+    }
+  }
+  
+  
   
 });
 
