@@ -1,0 +1,26 @@
+# Fichiers généraux
+.git
+.gitignore
+.dockerignore
+docker-compose.*
+Dockerfile.dev
+
+.DS_Store
+.idea
+.vscode
+tmp
+*.md
+*.pdf
+
+# Fichiers React
+node_modules/
+dist/
+build/
+.cache/
+.npm
+.eslintcache
+/coverage
+
+# Fichiers de développement
+src/**/*.test.*
+src/**/*.spec.*
