@@ -8,6 +8,7 @@ COPY package*.json ./
 COPY styles.css ./
 COPY vite.config.js ./
 COPY index.html .
+COPY .env .env
 
 RUN npm install
 RUN npm run build
