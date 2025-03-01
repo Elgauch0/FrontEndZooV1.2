@@ -1,7 +1,9 @@
 
 const  token =sessionStorage.getItem('token'); 
-const API_URL = import.meta.env.VITE_API_URL;
-const API_SOURCE = import.meta.env.VITE_API_SOURCE
+//const API_URL = import.meta.env.VITE_API_URL;
+//const API_SOURCE = import.meta.env.VITE_API_SOURCE
+const API_URL = 'http://13.61.174.55:8000/api/' ;
+const API_SOURCE='http://13.61.174.55:8000/'
 export { API_SOURCE };
 
 
@@ -52,7 +54,7 @@ export  async function getStatistic(){
 
 export async function login({username,password}){
     try {
-        const response = await fetch('https://localhost:8000/api/login', {
+        const response = await fetch(API_URL+'login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

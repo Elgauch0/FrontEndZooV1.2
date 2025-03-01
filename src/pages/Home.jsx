@@ -49,7 +49,7 @@ const Accueil = () => {
               Bienvenue au Zoo Arcadia
             </h1>
             <p className="text-lg md:text-xl max-w-2xl mx-auto">
-              Un sanctuaire naturel où la biodiversité rencontre l'émerveillement !!
+              Un sanctuaire naturel où la biodiversité rencontre l'émerveillement !
             </p>
           </div>
         </div>
