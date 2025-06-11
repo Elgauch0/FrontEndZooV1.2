@@ -7,7 +7,7 @@ const Footer = () => {
           <div className="mb-8 md:mb-0">
             <h2 className="text-2xl font-bold text-white mb-4">Arcadia Zoo</h2>
             <p className="text-sm text-green-100 leading-relaxed">
-              Sanctuaire naturel dédié à la préservation de la biodiversité 
+              Sanctuaire naturel dédié à la préservation de la biodiversité
               et à l'éducation environnementale.
             </p>
           </div>
@@ -17,14 +17,14 @@ const Footer = () => {
             <h3 className="text-lg font-semibold text-white mb-4">Explorer</h3>
             <ul className="space-y-2">
               {[
-                  { name:'Horaires', link:'/horaire' },
-                  { name: 'Services', link: '/services' },
-                  { name: 'Habitats', link: '/habitats' },
-                  { name: 'Contact', link: '/contact' },
-                  
-                   ].map((item) => (
+                { name: 'Horaires', link: '/horaire' },
+                { name: 'Services', link: '/services' },
+                { name: 'Habitats', link: '/habitats' },
+                { name: 'Contact', link: '/contact' },
+
+              ].map((item) => (
                 <li key={item.name}>
-                  <a 
+                  <a
                     href={item.link}
                     className="text-green-100 hover:text-white transition-colors text-sm"
                   >
@@ -41,8 +41,8 @@ const Footer = () => {
             <ul className="space-y-2">
               {['Confidentialité', 'Conditions d\'utilisation', 'FAQ', 'Accessibilité'].map((item) => (
                 <li key={item}>
-                  <a 
-                    href="#" 
+                  <a
+                    href="#"
                     className="text-green-100 hover:text-white transition-colors text-sm"
                   >
                     {item}
@@ -70,7 +70,7 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           {/* Copyright */}
           <p className="text-xs text-green-400 text-center">
-            &copy; {new Date().getFullYear()} Arcadia Zoo - Tous droits réservés
+            &copy; {new Date().getFullYear()} Arcadia Zoo - Tous droits réservés Elkaouri
           </p>
 
           {/* Réseaux sociaux */}
@@ -82,14 +82,14 @@ const Footer = () => {
                 className="text-green-300 hover:text-white transition-colors"
                 aria-label={`Suivez-nous sur ${network}`}
               >
-                <svg 
-                  className="w-5 h-5" 
-                  fill="currentColor" 
+                <svg
+                  className="w-5 h-5"
+                  fill="currentColor"
                   viewBox="0 0 24 24"
                   aria-hidden="true"
                 >
                   {/* Icônes SVG simplifiées */}
-                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
                 </svg>
               </a>
             ))}
