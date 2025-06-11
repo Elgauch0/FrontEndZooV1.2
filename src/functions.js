@@ -2,8 +2,8 @@
 const  token =sessionStorage.getItem('token'); 
 //const API_URL = import.meta.env.VITE_API_URL;
 //const API_SOURCE = import.meta.env.VITE_API_SOURCE
-const API_URL = 'http://51.47.198.51/api/';
-const API_SOURCE = 'http://51.47.198.51/';
+const API_URL = 'http://52.47.198.51/api/';
+const API_SOURCE = 'http://52.47.198.51/';
 export { API_SOURCE };
 
 
