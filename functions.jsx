@@ -1,6 +1,6 @@
-const  token =sessionStorage.getItem('token'); 
-const API_URL = 'https://localhost:8000/api/'; 
-const API_SOURCE ='https://localhost:8000/';
+const token = sessionStorage.getItem('token');
+const API_URL = 'http://51.47.198.51/api/';
+const API_SOURCE = 'http://51.47.198.51/';
 export { API_SOURCE };
 
 
@@ -20,146 +20,151 @@ export function requireAuth() {
       sessionStorage.removeItem('token');
       return false;
     }
-    
+
     return true;
   } catch {
-    
+
     sessionStorage.removeItem('token');
     return false;
   }
 }
 
 
-export  async function getStatistic(){
-  try{
-    const response = await fetch(API_URL+'administration/visits',{
-      method:'GET',
-      headers:{ 'Content-Type': 'application/json',
-               'Authorization': `Bearer ${token}`
-               },
-           });
-           if(!response.ok){
-            throw new Error('Failed Response from server.');
-           }
-          const data = await response.json();
-          return data;
-      }catch (error) {
-        console.error('Erreur:', error);
-        return null;
+export async function getStatistic() {
+  try {
+    const response = await fetch(API_URL + 'administration/visits', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+    });
+    if (!response.ok) {
+      throw new Error('Failed Response from server.');
     }
-}
-
-export async function login({username,password}){
-    try {
-        const response = await fetch('https://localhost:8000/api/login', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ username, password }),
-        });
-    
-        if (response.ok) {
-          
-          const {token} = await response.json();
-          return token;
-
-        }else {
-          const errorData = await response.json(); 
-          console.error(`Login failed: ${response.status} - ${response.statusText} - ${JSON.stringify(errorData)}`);
-          return null; 
-         }
-        
-    } catch (err) {
-        console.log('Une erreur s\'est produite:', err);
-        return null;
-      }
-}
-
-
-export async function getServices(){
-  try{
-  const response = await fetch( API_URL+'services',{
-    method:'GET',
-    headers:{'Content-Type':'application/json',
-              'Authorization': `Bearer ${token}`
-    }
-   });
-  
-  if(!response.ok){
-    throw new Error('une erreur dans le fetch ou serveur non accecible');
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Erreur:', error);
+    return null;
   }
-  const data = await  response.json();
-  
-  return data;
- }catch(error){
-  console.error('try catch problem',error);
-  return 'serveur error';
-}            
+}
+
+export async function login({ username, password }) {
+  try {
+    const response = await fetch(API_URL + 'login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, password }),
+    });
+
+    if (response.ok) {
+
+      const { token } = await response.json();
+      return token;
+
+    } else {
+      const errorData = await response.json();
+      console.error(`Login failed: ${response.status} - ${response.statusText} - ${JSON.stringify(errorData)}`);
+      return null;
+    }
+
+  } catch (err) {
+    console.log('Une erreur s\'est produite:', err);
+    return null;
+  }
+}
+
+
+export async function getServices() {
+  try {
+    const response = await fetch(API_URL + 'services', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error('une erreur dans le fetch ou serveur non accecible');
+    }
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error('try catch problem', error);
+    return 'serveur error';
+  }
 }
 
 export async function deleteService(id) {
   try {
-    const response = await fetch(API_URL+`administration/services/${id}`, {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
+    const response = await fetch(API_URL + `administration/services/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
 
-         },
+      },
     });
 
     if (!response.ok) {
-        throw new Error('Erreur lors de la suppression du service');
+      throw new Error('Erreur lors de la suppression du service');
     }
 
     return true;
-} catch (error) {
+  } catch (error) {
     console.error('Erreur:', error);
-}
-  
+  }
+
 }
 
 export async function addService({ nom, description }) {
   try {
-      const response = await fetch(API_URL +'administration/services/add', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json',
-                      'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ nom, description })
-      });
+    const response = await fetch(API_URL + 'administration/services/add', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ nom, description })
+    });
 
-      if (!response.ok) {
-          throw new Error('Erreur lors de l\'ajout du service.');
-      }
-      
-      const data = await response.json();
-      return { success: true, data };
+    if (!response.ok) {
+      throw new Error('Erreur lors de l\'ajout du service.');
+    }
+
+    const data = await response.json();
+    return { success: true, data };
   } catch (error) {
-      console.error('Erreur réseau:', error);
-      return { success: false, error: 'Une erreur s\'est produite lors de la tentative d\'ajout du service.' };
+    console.error('Erreur réseau:', error);
+    return { success: false, error: 'Une erreur s\'est produite lors de la tentative d\'ajout du service.' };
   }
 }
 
-export async function putService(id,{nom,description}) {
-  
-  try{
-    const response = await fetch(API_URL+`administration/services/${id}`, {
+export async function putService(id, { nom, description }) {
+
+  try {
+    const response = await fetch(API_URL + `administration/services/${id}`, {
       method: 'put',
-      headers: { 'Content-Type': 'application/json',
-                 'Authorization': `Bearer ${token}`
-       },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
       body: JSON.stringify({ nom, description }),
-  });
+    });
 
-  if (!response.ok) {
+    if (!response.ok) {
       return false;
-  }
+    }
 
 
-   return true;
+    return true;
 
-  }catch(err){
+  } catch (err) {
     console.error(err);
     return false
   }
@@ -167,32 +172,32 @@ export async function putService(id,{nom,description}) {
 
 
 
-export async function getreviews(pathname){
-  const admin = pathname ==="nvalid" ? 'administration/': '';
-  try{
-    const response = await fetch(API_URL +`${admin}reviews/${pathname}`,{
+export async function getreviews(pathname) {
+  const admin = pathname === "nvalid" ? 'administration/' : '';
+  try {
+    const response = await fetch(API_URL + `${admin}reviews/${pathname}`, {
       method: 'GET',
-      headers: { 'Content-Type': 'application/json',
-                  'Authorization': `Bearer ${token}`
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
       },
     });
-    if(!response.ok){
-     throw new Error('une erreur dans le fetch ou serveur non accecible');
+    if (!response.ok) {
+      throw new Error('une erreur dans le fetch ou serveur non accecible');
     }
     const data = await response.json();
-   
+
     return data
 
-  }catch(err){
-    console.error('try catch problem',err);
+  } catch (err) {
+    console.error('try catch problem', err);
     return null
 
   }
-
-
 }
+
 export async function addAlimentation(animal_id, nourriture_donnée, quantité) {
-  const response = await fetch(API_URL+'administration/alimentation/add', {
+  const response = await fetch(API_URL + 'administration/alimentation/add', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -213,7 +218,7 @@ export async function addAlimentation(animal_id, nourriture_donnée, quantité) 
   return response.json();
 }
 
-export async function validReview(id,action) {
+export async function validReview(id, action) {
   const response = await fetch(API_URL + `administration/reviews/${id}?action=${action}`, {
     method: 'POST',
     headers: {
@@ -227,11 +232,11 @@ export async function validReview(id,action) {
     const errorData = await response.json();
     throw new Error('Réponse fetch erreur');
   }
-  
+
 }
 
-export async function sendReview({username,avis}) {
-  try{
+export async function sendReview({ username, avis }) {
+  try {
     const response = await fetch(API_URL + 'reviews/add', {
       method: 'POST',
       headers: {
@@ -239,29 +244,30 @@ export async function sendReview({username,avis}) {
       },
       body: JSON.stringify({ username, avis }),
     });
-    if(!response.ok){
+    if (!response.ok) {
       console.error('response error')
       return 'error response try again later'
     }
-   return 'Merci pour votre commmentaires , il va etre vu sur notre site dès que quil sera validé'
+    return 'Merci pour votre commmentaires , il va etre vu sur notre site dès que quil sera validé'
 
-  }catch(err){
-    console.error(err,'try catch error');
+  } catch (err) {
+    console.error(err, 'try catch error');
     return 'try catch erreur try later'
 
   }
-  
 
-  
+
+
 }
 
 
 export async function getAnimals() {
 
   try {
-    const response = await fetch(API_URL +'animal',{
+    const response = await fetch(API_URL + 'animal', {
       method: 'GET',
-      headers: { 'Content-Type': 'application/json',
+      headers: {
+        'Content-Type': 'application/json',
       },
 
     });
@@ -275,11 +281,12 @@ export async function getAnimals() {
   }
 }
 
-export async function getHoraire(){
+export async function getHoraire() {
   try {
-    const response = await fetch(API_URL +'horaire',{
+    const response = await fetch(API_URL + 'horaire', {
       method: 'GET',
-      headers: { 'Content-Type': 'application/json',
+      headers: {
+        'Content-Type': 'application/json',
       },
 
     });
@@ -293,51 +300,53 @@ export async function getHoraire(){
   }
 }
 
-export async function putHoraire(id,horaireData){
-  try{  const response = await fetch(API_URL +`administration/horaire/${id}`, {
-    method: 'PUT',
-    headers: {
+export async function putHoraire(id, horaireData) {
+  try {
+    const response = await fetch(API_URL + `administration/horaire/${id}`, {
+      method: 'PUT',
+      headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
-    },
-    body: JSON.stringify(horaireData),
-});
+      },
+      body: JSON.stringify(horaireData),
+    });
 
-if (!response.ok) {
-    const error = await response.json();
-    return {error:true , text:'erreur response'};
-}
+    if (!response.ok) {
+      const error = await response.json();
+      return { error: true, text: 'erreur response' };
+    }
 
-  }catch(err){
+  } catch (err) {
     console.error(err);
-    return {error:true , text:'erreur catch'};
+    return { error: true, text: 'erreur catch' };
   }
 
 }
 
 
-export async function getRapports(page=1,limit=10){
-  const baseUrl = API_URL+'administration/alimentation';
+export async function getRapports(page = 1, limit = 10) {
+  const baseUrl = API_URL + 'administration/alimentation';
   const url = (page && limit) ? `${baseUrl}?page=${page}&limit=${limit}` : baseUrl;
-  try{
-    const response = await fetch(url,{
+  try {
+    const response = await fetch(url, {
       method: 'GET',
-      headers: { 'Content-Type': 'application/json',
-                  'Authorization': `Bearer ${token}`
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
       },
 
 
     });
-    
-    if(!response.ok){
-     throw new Error('response erreur request invalid');
+
+    if (!response.ok) {
+      throw new Error('response erreur request invalid');
     }
     const data = await response.json();
-   
+
     return data
 
-  }catch(err){
-    console.error('try catch problem',err);
+  } catch (err) {
+    console.error('try catch problem', err);
     return null
 
   }
@@ -347,69 +356,69 @@ export async function getRapports(page=1,limit=10){
 
 
 export async function getHabitats() {
-  try{
-      
-      const response = await fetch(API_URL+'habitat/');
-      if (!response.ok) {
-        throw new Error('Erreur lors de la récupération des habitats');
-      }
+  try {
 
-      const habitats = await response.json();
-     
+    const response = await fetch(API_URL + 'habitat/');
+    if (!response.ok) {
+      throw new Error('Erreur lors de la récupération des habitats');
+    }
 
-      return habitats;
-    }catch (err) {
+    const habitats = await response.json();
+
+
+    return habitats;
+  } catch (err) {
     console.error(err);
     throw new Error('Erreur lors de la récupération des habitats');
   }
 }
-export async function deleteHabitat(id){
-try {
-  const response = await fetch(API_URL+`administration/habitat/${id}`, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+export async function deleteHabitat(id) {
+  try {
+    const response = await fetch(API_URL + `administration/habitat/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    });
+    if (!response.ok) {
+      throw new Error('Erreur lors de la suppression de l\'utilisateur');
     }
-  });
-  if (!response.ok) {
-    throw new Error('Erreur lors de la suppression de l\'utilisateur');
-  }
-  return true;
-}catch(err){
-console.error(err);
-return false
+    return true;
+  } catch (err) {
+    console.error(err);
+    return false
 
+  }
 }
-}
-export async function updateHabitat({nom,description,imageFile}, habitatId) {
+export async function updateHabitat({ nom, description, imageFile }, habitatId) {
   const formData = new FormData();
   formData.append('nom', nom);
   formData.append('description', description);
   if (imageFile) {
     formData.append('imageFile', imageFile);
-}
+  }
   try {
-    const response = await fetch(API_URL+`administration/habitat/${habitatId}`, {
+    const response = await fetch(API_URL + `administration/habitat/${habitatId}`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${token}`
-         },
+      },
 
       body: formData,
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-     return  { error:true, text: errorData?.message };
+      return { error: true, text: errorData?.message };
     }
 
-    return {error:false,text:'habitat edité avec succes'};
+    return { error: false, text: 'habitat edité avec succes' };
   } catch (error) {
-    return { error:true, text: error.message };
+    return { error: true, text: error.message };
   }
 }
-export async function createHabitat({nom,description,imageFile}) {
+export async function createHabitat({ nom, description, imageFile }) {
   const formData = new FormData();
   formData.append('nom', nom);
   formData.append('description', description);
@@ -440,26 +449,27 @@ export async function createHabitat({nom,description,imageFile}) {
 
 export async function getUsers() {
   try {
-      
-      const response = await fetch(API_URL+'administration/admin/users',{
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-        },
-      });
-      if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const users = await response.json();    
-      return users;
+
+    const response = await fetch(API_URL + 'administration/admin/users', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const users = await response.json();
+    return users;
   } catch (error) {
-     console.error('Erreur lors de la récupération des utilisateurs:', error);
+    console.error('Erreur lors de la récupération des utilisateurs:', error);
   }
 }
 
 
 export async function deleteUser(id) {
-  const response = await fetch(API_URL+`administration/admin/users/${id}`, {
+  const response = await fetch(API_URL + `administration/admin/users/${id}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
@@ -494,8 +504,8 @@ export async function createUser(userData) {
 
 export async function getComptesR() {
   try {
-    
-    const response = await fetch(API_URL+"administration/vet/rapport/",{
+
+    const response = await fetch(API_URL + "administration/vet/rapport/", {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -503,63 +513,64 @@ export async function getComptesR() {
       },
     });
 
-    
+
     if (!response.ok) {
       throw new Error(`Erreur HTTP: ${response.status}`);
     }
     const data = await response.json();
 
-   
+
     return data;
   } catch (error) {
-    
+
     console.error("Erreur lors de la récupération des rapports:", error);
     throw error;
   }
 }
 
-export async function updateAnimal(id,{nom,description,habitatId,imageFile}) {
+export async function updateAnimal(id, { nom, description, habitatId, imageFile }) {
   const formData = new FormData();
   formData.append('nom', nom);
   formData.append('description', description);
   formData.append('habitatId', habitatId);
   if (imageFile) {
-      formData.append('imageFile', imageFile);
+    formData.append('imageFile', imageFile);
   }
-  const response = await fetch(API_URL+`administration/animal/${id}`, {
+  const response = await fetch(API_URL + `administration/animal/${id}`, {
     method: 'POST',
     headers: {
-        'Authorization': `Bearer ${token}`
-        
+      'Authorization': `Bearer ${token}`
+
     },
     body: formData,
-});
-
-if (!response.ok) {
-    throw new Error('Failed to update animal');
-}
-  
-}
-export async function addAnimal(formData) {
- 
-  const response = await fetch(API_URL + "administration/animal/add", {
-      method: "POST",
-      headers: {
-          'Authorization': `Bearer ${token}`
-      },
-      body: formData
   });
 
   if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || "Erreur lors de l'ajout de l'animal");
+    throw new Error('Failed to update animal');
+  }
+
+}
+export async function addAnimal(formData) {
+
+  const response = await fetch(API_URL + "administration/animal/add", {
+    method: "POST",
+    headers: {
+      'Authorization': `Bearer ${token}`
+    },
+    body: formData
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || "Erreur lors de l'ajout de l'animal");
   }
 }
 export async function getAnimal(id) {
   try {
-    const response = await fetch(API_URL +`animal/${id}`,{
+    const response = await fetch(API_URL + `animal/${id}`, {
       method: 'GET',
-      headers: { 'Content-Type': 'application/json',
+      headers: {
+        'Content-Type': 'application/json',
       },
 
     });
@@ -570,26 +581,27 @@ export async function getAnimal(id) {
     return animals;
   } catch (err) {
     console.error('Erreur lors de la récupération des animaux:', err);
-  }  
+  }
 }
 
 export async function deleteAnimal(id) {
   console.log(token)
-  const response = await fetch(API_URL+`administration/animal/${id}`, {
+  const response = await fetch(API_URL + `administration/animal/${id}`, {
     method: "DELETE",
-    headers:{ 
+    headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`}
+      'Authorization': `Bearer ${token}`
+    }
   });
   if (!response.ok) {
-      console.log('response not ok')
+    console.log('response not ok')
     throw new Error("Erreur lors de la suppression de l'animal");
   }
-  
+
 }
 
 export async function addRapport({ etat, nourriture, autreDetail, animalId }) {
-  const response = await fetch(API_URL+'administration/vet/rapport/add', {
+  const response = await fetch(API_URL + 'administration/vet/rapport/add', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -607,42 +619,42 @@ export async function addRapport({ etat, nourriture, autreDetail, animalId }) {
     }
     throw new Error('Erreur de réponse');
   }
-  
+
 }
 
-export async function addTache(id,data) {
+export async function addTache(id, data) {
   try {
-    const response = await fetch(API_URL+`administration/habitat/avis/${id}`, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json",
-            'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(data),
+    const response = await fetch(API_URL + `administration/habitat/avis/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(data),
     });
     console.log(response);
 
     if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Erreur lors de la mise à jour de l'habitat");
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Erreur lors de la mise à jour de l'habitat");
     }
 
-    
+
     return { erreur: false, message: "mise a jour de l habitat avec  succès !" };
-} catch (error) {
+  } catch (error) {
     console.error("Erreur lors de la mise à jour de l'habitat :", error.message);
     // Retourner un message d'erreur
     return { erreur: true, message: "Problème serveur : le commentaire n'a pas pu être envoyé." };
-}
-  
+  }
+
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 export function setRole(rolesArray) {
   if (rolesArray.includes('ROLE_ADMIN')) {
-      return 'Admin';
+    return 'Admin';
   }
   if (rolesArray.includes('ROLE_VETERINAIRE')) {
-      return 'Vétérinaire';
+    return 'Vétérinaire';
   }
   return 'Employé';
 }

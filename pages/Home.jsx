@@ -53,7 +53,7 @@ const Accueil = () => {
             </p>
           </div>
         </div>
-        <img 
+        <img
           src={ZooBienvenue}
           alt="Entrée majestueuse du zoo Arcadia"
           className="w-full h-full object-cover"
@@ -71,19 +71,19 @@ const Accueil = () => {
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div className="space-y-4 text-gray-700 text-lg">
               <p>
-              Venez découvrir notre Zoo au cœur de la forêt de Brocéliande situez en Bretagne,
-              Évadez-vous et partez à la rencontre de plus de 200 espèces animal issue de la faune mondiale répartis sur
-             18 hectares, depuis 50 ans Arcadia s'engage auprès de l'écologie, au maintien de la biodiversité et à la
-             conservation des espèces
+                Venez découvrir notre Zoo au cœur de la forêt de Brocéliande situez en Bretagne,
+                Évadez-vous et partez à la rencontre de plus de 200 espèces animal issue de la faune mondiale répartis sur
+                18 hectares, depuis 50 ans Arcadia s'engage auprès de l'écologie, au maintien de la biodiversité et à la
+                conservation des espèces
               </p>
               <p>
-                Nos programmes de conservation et de recherche contribuent 
+                Nos programmes de conservation et de recherche contribuent
                 activement à la protection des espèces menacées.
               </p>
             </div>
             <div className="relative h-80 rounded-xl overflow-hidden shadow-xl">
-              <img 
-                src="https://images.unsplash.com/photo-1552410260-0fd9b577afa6" 
+              <img
+                src="https://images.unsplash.com/photo-1552410260-0fd9b577afa6"
                 alt="Lion dans son habitat"
                 className="w-full h-full object-cover"
                 loading="lazy"
@@ -96,7 +96,7 @@ const Accueil = () => {
         <section className="my-16">
           <Link to="/habitats" className="block group">
             <div className="relative h-80 w-full rounded-xl overflow-hidden shadow-xl">
-              <img 
+              <img
                 src={trainHabitats}
                 alt="Train des habitats du zoo Arcadia"
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
@@ -123,7 +123,7 @@ const Accueil = () => {
               Témoignages de Nos Visiteurs
             </h2>
             <p className="text-gray-600 max-w-xl mx-auto">
-              Découvrez ce que nos visiteurs pensent de leur expérience au zoo
+              Découvrez ce que nos visiteurs pensent de leur expérience au Zoo
             </p>
           </div>
 
