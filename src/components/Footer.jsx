@@ -70,7 +70,7 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           {/* Copyright */}
           <p className="text-xs text-green-400 text-center">
-            &copy; {new Date().getFullYear()} El Kaouri :: - Tous droits réservés
+            &copy; {new Date().getFullYear()} El Kaouri A - Tous droits réservés
           </p>
 
           {/* Réseaux sociaux */}
