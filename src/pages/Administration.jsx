@@ -20,12 +20,12 @@ export async function action({ request }) {
 
   const { roles } = decodedToken;
 
-  if (roles.includes('Admin_Role')) {
+  if (roles.includes('ROLE_ADMIN')) {
     sessionStorage.setItem('role', 'ROLE_ADMIN');
     sessionStorage.setItem('dashboard', '/dashboardAdmin');
     return redirect('/dashboardAdmin', { replace: true })
 
-  } else if (roles.includes('Veterinaire_Role')) {
+  } else if (roles.includes('ROLE_VETERINAIRE')) {
     sessionStorage.setItem('role', 'ROLE_VETERINAIRE');
     sessionStorage.setItem('dashboard', '/dashboardVet');
     return redirect('/dashboardVet', { replace: true });
