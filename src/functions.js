@@ -180,23 +180,33 @@ export async function putService(id, { nom, description }) {
 
 export async function getreviews(pathname) {
   const admin = pathname === "nvalid" ? 'administration/' : ''; 
+  const isAuthRequired = pathname === "nvalid" || pathname.startsWith('administration/'); 
+
   try {
-    // Récupère le token juste avant la requête
-    const token = sessionStorage.getItem('token');
-    if (!token) { throw new Error('Authentification requise: aucun token trouvé.'); }
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+
+    if (isAuthRequired) {
+      const token = sessionStorage.getItem('token');
+      if (!token) {
+        throw new Error('Authentification requise: aucun token trouvé.');
+      }
+      headers['Authorization'] = `Bearer ${token}`;
+    }
 
     const response = await fetch(API_URL + `${admin}reviews/${pathname}`, {
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
+      headers: headers,
     });
+
     if (!response.ok) {
       throw new Error('Une erreur dans le fetch ou serveur non accessible');
     }
+
     const data = await response.json();
     return data;
+
   } catch (err) {
     console.error('Problème de récupération des avis:', err);
     return null;
