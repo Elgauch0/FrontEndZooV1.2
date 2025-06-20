@@ -1,8 +1,8 @@
 
 
 
-const API_URL = 'http://52.47.198.51/api/';
-const API_SOURCE = 'http://52.47.198.51/';
+const API_URL = 'https://elkaouri.com/api/';
+const API_SOURCE = 'https://elkaouri.com/';
 export { API_SOURCE };
 
 
