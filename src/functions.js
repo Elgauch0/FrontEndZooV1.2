@@ -78,9 +78,7 @@ export async function login({ username, password }) {
 
 export async function getServices() {
   try {
-    // Récupère le token juste avant la requête
-    const token = sessionStorage.getItem('token');
-    if (!token) { throw new Error('Authentification requise: aucun token trouvé.'); }
+  
 
     const response = await fetch(API_URL + 'services', {
       method: 'GET',
