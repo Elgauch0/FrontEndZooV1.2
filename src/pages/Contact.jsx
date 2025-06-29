@@ -1,6 +1,7 @@
 
-import { Form,redirect, useNavigation, useSearchParams } from 'react-router';
-import { useRef,useEffect } from 'react';
+import { Form, redirect, useNavigation, useSearchParams } from 'react-router';
+import { useRef, useEffect } from 'react';
+import { API_URL } from '@functions';
 
 export async function action({ request }) {
   const formData = await request.formData();
@@ -8,53 +9,53 @@ export async function action({ request }) {
   const titre = formData.get('titre');
   const description = formData.get('description');
 
-  
+
   if (!email || !titre || !description) {
-    return redirect('?message=try again',{replace:true});
+    return redirect('?message=try again', { replace: true });
   }
 
-  const data = {  
+  const data = {
     email: email,
     titre: titre,
     description: description
   };
 
   try {
-    const response = await fetch('https://127.0.0.1:8000/api/contact', {
+    const response = await fetch(API_URL + 'contact', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(data) 
+      body: JSON.stringify(data)
     });
 
     if (!response.ok) {
-      const errorData = await response.json(); 
+      const errorData = await response.json();
       console.error(errorData)
-      return redirect('?message=error from the server or bad request',{ replace: true }); 
+      return redirect('?message=error from the server or bad request', { replace: true });
     }
 
-    return redirect('?message=email envoyé avec succes on vous réponde dés que possible',{ replace: true });
+    return redirect('?message=email envoyé avec succes on vous réponde dés que possible', { replace: true });
 
   } catch (error) {
     console.error("Erreur lors de la requête fetch :", error); // Log l'erreur pour le débogage
-    return redirect('?message=error fetch try later please',{ replace: true });
+    return redirect('?message=error fetch try later please', { replace: true });
   }
 }
 
 const Contact = () => {
-  const [searchParams]= useSearchParams();
+  const [searchParams] = useSearchParams();
   const message = searchParams.get('message');
-  const navigation = useNavigation(); 
+  const navigation = useNavigation();
   const formRef = useRef();
 
-  useEffect(()=>{
-    if(formRef.current && message){
-      formRef.current.reset(); 
+  useEffect(() => {
+    if (formRef.current && message) {
+      formRef.current.reset();
       console.log(message);
     }
 
-  },[message])
+  }, [message])
 
 
 
@@ -64,7 +65,7 @@ const Contact = () => {
         <h1 className="text-4xl font-bold text-center text-green-900 mb-8">
           Nous Contacter :
         </h1>
-         
+
         {message && (
           <div className="mb-6 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 text-center">
             <p>{message}</p>
@@ -118,7 +119,7 @@ const Contact = () => {
               />
             </div>
 
-          
+
 
             {/* Bouton de soumission */}
             <button
